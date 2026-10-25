@@ -13,19 +13,19 @@
 
 ## 2. Tests and guards
 
-- [ ] 2.1 Add `test/tsconfig.json` (test settings from design §2), the `test` script, and `test/site.test.ts`, the relative-URL guard from design §5. Verify:
+- [x] 2.1 Add `test/tsconfig.json` (test settings from design §2), the `test` script, and `test/site.test.ts`, the relative-URL guard from design §5. Verify:
   - `npm test` passes;
   - it fails when `site/index.html` refers to `/js/main.js`, `https://lines.bortnik.org/js/main.js` or `https://github.com/timbortnik/lines`, in double or single quotes;
   - it fails when a file type it doesn't check, such as an empty `site/x.css`, is added.
 
   Revert each temporary edit afterwards.
-- [ ] 2.2 Add `test/dependencies.test.ts`, the dependency guard from design §4. Verify: `npm test` passes, and fails after `npm install -D` or `npm install -O` of any package (revert it afterwards).
-- [ ] 2.3 Check the test command's failure modes, reverting each temporary edit afterwards. Verify:
+- [x] 2.2 Add `test/dependencies.test.ts`, the dependency guard from design §4. Verify: `npm test` passes, and fails after `npm install -D` or `npm install -O` of any package (revert it afterwards).
+- [x] 2.3 Check the test command's failure modes, reverting each temporary edit afterwards. Verify:
   - a failing assertion makes `npm test` exit non-zero, and its report points to the `test/*.test.ts` line;
   - a type error in a test exits non-zero before any test runs;
   - a test importing a `src/` module that reads `document` fails with a type error.
-- [ ] 2.4 Run `npm test` and `npm run build` on a Node 22 build without TypeScript support (the maintainer's Ubuntu Node 22.22.1). Verify: both succeed.
-- [ ] 2.5 Add a "Testing" section to `README.md`. Verify: the documented command runs as written.
+- [x] 2.4 Run `npm test` and `npm run build` on a Node 22 build without TypeScript support (the maintainer's Ubuntu Node 22.22.1). Verify: both succeed.
+- [x] 2.5 Add a "Testing" section to `README.md`. Verify: the documented command runs as written.
 
 ## 3. Continuous integration and deployment workflow
 

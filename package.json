@@ -8,7 +8,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "tsc -p ."
+    "build": "tsc -p .",
+    "test": "tsc -p test && node --enable-source-maps --test \"build/**/*.test.js\""
   },
   "devDependencies": {
     "@types/node": "^22.20.5",

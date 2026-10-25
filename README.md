@@ -18,6 +18,14 @@ python3 -m http.server -d site    # or any other static file server
 
 Then open http://localhost:8000.
 
+## Testing
+
+```sh
+npm test
+```
+
+This compiles `test/`, together with the `src/` modules the tests import, into `build/`, then runs the tests with Node's built-in test runner. Failures point at lines in the TypeScript sources. Two of the tests guard project rules: the site refers to its own files with relative URLs only, and the only dependencies are `typescript` and `@types/node`.
+
 ## Planning changes
 
 Changes are planned with [OpenSpec](https://github.com/Fission-AI/OpenSpec) in `openspec/`. You need the OpenSpec CLI only to plan changes, not to build, test or contribute code.
