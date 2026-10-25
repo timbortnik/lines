@@ -8,9 +8,11 @@ export interface View {
   /** The 81 cells, row by row, matching the board's cell numbers. */
   cells: HTMLElement[];
   score: HTMLElement;
+  best: HTMLElement;
   preview: HTMLElement;
   over: HTMLElement;
   finalScore: HTMLElement;
+  newBest: HTMLElement;
   newGameButtons: HTMLElement[];
 }
 
@@ -25,23 +27,30 @@ export function createView(): View {
   return {
     cells,
     score: byId('score'),
+    best: byId('best'),
     preview: byId('preview'),
     over: byId('over'),
     finalScore: byId('final-score'),
+    newBest: byId('new-best'),
     newGameButtons: [byId('new-game'), byId('play-again')],
   };
 }
 
-/** Redraws everything from `game`: balls, next balls, score, preview and the game-over message. */
-export function render(view: View, game: Game): void {
+/**
+ * Redraws everything from `game`: balls, next balls, scores, preview and the game-over message.
+ * `best` is the best score of the games before this one.
+ */
+export function render(view: View, game: Game, best: number): void {
   view.cells.forEach((cell, index) => {
     const color = game.board[index];
     cell.replaceChildren(...(color === EMPTY ? [] : [ballElement(color)]));
   });
   for (const ball of game.next) view.cells[ball.cell].replaceChildren(ballElement(ball.color, true));
   showScore(view, game.score);
+  view.best.textContent = String(Math.max(best, game.score));
   showPreview(view, game.next);
   view.finalScore.textContent = String(game.score);
+  view.newBest.hidden = !(game.over && game.score > best);
   view.over.hidden = !game.over;
 }
 
