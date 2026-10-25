@@ -1,8 +1,10 @@
 // Shared fixtures for the rules tests.
 
 import { CELLS, EMPTY, cellAt } from '../../src/game/board.ts';
+import { move } from '../../src/game/game.ts';
 import type { Ball, Game, Random } from '../../src/game/game.ts';
 import { findLines } from '../../src/game/lines.ts';
+import { findPath } from '../../src/game/path.ts';
 
 /** A deterministic stand-in for Math.random (mulberry32). */
 export function seeded(seed: number): Random {
@@ -47,4 +49,24 @@ export function balls(board: readonly number[]): number[] {
 
 export function hasLine(board: readonly number[]): boolean {
   return findLines(board, balls(board)).length > 0;
+}
+
+/** The first legal move found, scanning origins and destinations in cell order. */
+export function firstMove(game: Game): [number, number] {
+  for (let from = 0; from < game.board.length; from++) {
+    if (game.board[from] === EMPTY) continue;
+    for (let to = 0; to < game.board.length; to++) {
+      if (game.board[to] === EMPTY && findPath(game.board, from, to) !== null) return [from, to];
+    }
+  }
+  throw new Error('no legal move');
+}
+
+/** Plays `turns` first-found moves, with a fresh seed for each. */
+export function playFrom(game: Game, turns: number, seed: number): Game {
+  for (let i = 0; i < turns && !game.over; i++) {
+    const [from, to] = firstMove(game);
+    game = move(game, from, to, seeded(seed + i))!.game;
+  }
+  return game;
 }
