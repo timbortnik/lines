@@ -1,4 +1,4 @@
-/* Everything the game looks like. The scripts only add and remove elements and classes. */
+/* Everything the game looks like. The scripts only add and remove elements and classes, and animate them. */
 
 :root {
   --gutter: 16px;
@@ -11,6 +11,8 @@ html {
   background: #2b2b2b;
   color: #eee;
   font: 18px/1.2 system-ui, sans-serif;
+  /* No pull-to-refresh, which would reload the page and lose the game. */
+  overscroll-behavior: none;
 }
 
 body {
@@ -22,8 +24,10 @@ body {
 
 main {
   display: grid;
+  justify-items: center;
   gap: var(--gutter);
-  width: var(--board);
+  /* The bar needs about 360px. On a phone held sideways the board is narrower, and the bar is wider than it. */
+  width: max(var(--board), min(100dvw - 2 * var(--gutter), 360px));
   margin: var(--gutter) auto;
 }
 
@@ -32,7 +36,10 @@ header {
   align-items: center;
   justify-content: space-between;
   gap: var(--gutter);
+  justify-self: stretch;
   height: var(--bar);
+  font-size: min(18px, 4.5dvw);
+  white-space: nowrap;
 }
 
 button {
@@ -52,8 +59,8 @@ button {
 
 .preview .ball {
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: 1.75em;
+  height: 1.75em;
 }
 
 /* The board and the game-over message share one grid area, so the message covers the board. */
@@ -82,6 +89,7 @@ button {
 
 .cell.selected {
   background: #dadada;
+  box-shadow: inset 0 0 0 3px #555;
 }
 
 .ball {

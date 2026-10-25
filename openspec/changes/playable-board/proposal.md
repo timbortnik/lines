@@ -15,7 +15,7 @@ The rules are done and fully tested, but https://lines.bortnik.org still shows a
   - tap another ball to switch, or the same ball to drop the selection;
   - tap an empty cell, or a cell with a small ball, to move there;
   - when no free path leads there, nothing happens and the ball stays selected.
-- **Animated turns.** The rules' turn record is played in order: the ball walks along its path, a covered next ball jumps, lines shrink away while the score counts up, new balls grow, and new small balls appear. The board is then redrawn from the new game state. Taps are ignored while a turn plays.
+- **Animated turns.** The rules' turn record is played in order: the ball walks along its path, a covered next ball jumps, lines shrink away while the score adds their points, new balls grow, and new small balls appear. The board is then redrawn from the new game state. Taps are ignored while a turn plays.
 - **Reduced motion.** When the system asks for reduced motion, turns play at once and the selected ball is highlighted without bouncing.
 - **Game over** shows the final score and a New game button. New game starts over at once, without asking.
 - **The relative-URL guard covers stylesheets**, since the site gets its first one.

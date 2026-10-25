@@ -44,7 +44,7 @@ With a ball selected, tapping a cell without a ball, including a cell holding a 
 - **THEN** nothing happens
 
 ### Requirement: Animated turns
-A move SHALL be animated in the order the turn happened: the ball walks along its path, a covered next ball jumps, removed balls shrink away while the score counts up, appearing balls grow to full size, and new next balls appear small. Afterwards the board, score and preview SHALL match the new game state. Taps SHALL be ignored while a turn is animated.
+A move SHALL be animated in the order the turn happened: the ball walks along its path, a covered next ball jumps, removed balls shrink away while the score adds their points, appearing balls grow to full size, and new next balls appear small. Afterwards the board, score and preview SHALL match the new game state. Taps SHALL be ignored while a turn is animated.
 
 #### Scenario: Move that removes a line
 - **WHEN** a move completes a line

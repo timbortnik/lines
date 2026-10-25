@@ -80,7 +80,7 @@ Alternative considered: one absolutely positioned layer for all balls above the 
 --board: min(100dvw - 2 × gutter, 100dvh - bar - 3 × gutter)
 ```
 
-The page is one column `var(--board)` wide: the bar, then the board with `aspect-ratio: 1`. The game-over message sits over the board in the same grid area. `dvw` and `dvh` follow the visible viewport on phones, whose browser bars come and go. The body doesn't scroll.
+The page is one column: the bar, then the board with `aspect-ratio: 1`, centered. The column is as wide as the board but at least 360px where the screen allows, so the bar fits when a phone held sideways makes the board narrow; on screens under 400px wide the bar's text shrinks instead of wrapping. The game-over message sits over the board in the same grid area. `dvw` and `dvh` follow the visible viewport on phones, whose browser bars come and go. The body doesn't scroll, and `overscroll-behavior: none` stops pull-to-refresh from reloading the page mid-game.
 
 ### 8. The URL guard learns CSS
 
@@ -97,5 +97,5 @@ No unit tests for `src/ui/` or `main.ts` (see the proposal). Instead:
 
 - **UI code without automated tests** → it stays thin: no rule logic, and a full redraw after each turn. The rules carry the risk and keep their 100% coverage gate.
 - **The next-ball scale lives in two files** → both places mention each other; a mismatch only makes the growth start at a slightly different size.
-- **Header text on very narrow screens** (under about 320 px) could crowd → the bar's three items are short; checked at a 360 px width.
-- **A turn's animation can't be interrupted** → turns last well under a second; New game waits for the current turn.
+- **The bar on narrow screens** → its text scales with the screen width and never wraps; on a 320 px screen a 5-digit score overflows by a few pixels.
+- **A turn's animation can't be interrupted** → most turns last under a second; New game waits for the current turn.
