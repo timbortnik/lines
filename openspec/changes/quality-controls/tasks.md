@@ -29,6 +29,7 @@
   - Done 2026-10-25: the maintainer confirmed alerts and security updates are on, and there is no `.github/dependabot.yml`.
 - [x] 3.5 Maintainer: Settings → Advanced Security → enable **Private vulnerability reporting**. Verify: `curl -s https://api.github.com/repos/timbortnik/lines/private-vulnerability-reporting` prints `"enabled": true`.
   - Done 2026-10-25: the API returns `{"enabled":true}`.
+
 ## 4. Pre-review skill and planning rule
 
 - [ ] 4.1 Write `.claude/skills/pre-review/SKILL.md` (design §5) for this repository, with no text taken from other projects. Verify:
