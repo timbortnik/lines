@@ -14,7 +14,7 @@ The game SHALL be saved on the device as soon as a move is decided, before its a
 - **THEN** the same board, next balls and score are shown, and no ball is selected
 
 #### Scenario: Page closed during a turn's animation
-- **WHEN** the player closes the page while a turn is animated, then opens it again
+- **WHEN** the player closes the page while a turn that doesn't end the game is animated, then opens it again
 - **THEN** the game is shown as it is after that turn
 
 ### Requirement: Finished games aren't resumed
@@ -56,7 +56,7 @@ Before play resumes, the saved data SHALL be checked: its format version, the bo
 
 #### Scenario: Valid save
 - **WHEN** the saved data was written by the game
-- **THEN** it passes every check and play resumes from it
+- **THEN** it passes every check
 
 ### Requirement: Playing without storage
 When the device won't store data, because storage is blocked or full, the game SHALL play normally without saving, and SHALL warn once in the browser console.

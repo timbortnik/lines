@@ -36,8 +36,10 @@ function parseGame(game: unknown): Game {
   check(nextCells.every((cell) => board[cell] === EMPTY), 'a next ball is on a ball');
   check(isScore(score), 'bad score');
   check(over === !board.includes(EMPTY), 'game over does not match a full board');
-  // `move` only looks for lines through the cells that change, so a line already there would stay.
   const balls = board.flatMap((color, cell) => (color === EMPTY ? [] : [cell]));
+  // A cleared board is refilled at once; with no ball to move, the game could never go on.
+  check(balls.length > 0, 'no balls on the board');
+  // `move` only looks for lines through the cells that change, so a line already there would stay.
   check(findLines(board, balls).length === 0, 'a line is left on the board');
   return { board, next, score, over };
 }

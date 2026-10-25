@@ -40,12 +40,13 @@ interface Save {
 - objects have exactly the expected keys;
 - `version` is `SAVE_VERSION`;
 - the board is 81 integers from 0 to 7;
+- the board holds at least one ball, since a cleared board is refilled at once;
 - at most 3 next balls, each with an integer cell from 0 to 80 and a color from 1 to 7, on distinct cells that hold no ball;
 - `score` and `best` are non-negative safe integers and multiples of 10, since every score is a sum of `points(n)`, all multiples of 10;
 - `over` is true exactly when the board has no empty cell;
 - no line of 5 is left on the board, because `move` only looks for lines through the cells that change.
 
-Every check is a property every game the rules produce already has, so a real save never fails one. It lives in `src/game/` so the coverage gate covers it and the test build proves it uses no DOM. It doesn't touch storage.
+Every check is a property every game the rules produce already has, so a real save never fails one. It lives in `src/game/` so the coverage gate covers it. It doesn't touch storage.
 
 Alternative considered: accept anything with the right shape. A hand-edited or damaged save could then show balls on a full board, or a game that can never end.
 

@@ -178,6 +178,8 @@ dialog {
   padding: 1.2em;
   background: #3a3a3a;
   color: inherit;
+  box-sizing: border-box;
+  max-width: calc(100% - 2 * var(--gutter));
 }
 
 dialog::backdrop {
