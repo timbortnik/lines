@@ -18,4 +18,5 @@
 
 - [x] 3.1 Run the pre-review skill once on the whole branch, in a fresh read-only subagent, and apply the fixes the maintainer agrees to. Verify: findings and fixes are recorded for the pull request description.
   - Done 2026-10-25: a fresh subagent played 806 turns against the rules and found 6 issues; the maintainer approved all 6, plus turning off pull-to-refresh: the bar fits at 7 sizes up to 5-digit scores, the selection has a ring, the URL guard checks CSS inside HTML (proven red), and the wording is fixed.
-- [ ] 3.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+- [x] 3.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+  - Done 2026-10-25: created the game-board main spec (8 requirements) and widened site-delivery's relative-URL rule to stylesheets; `openspec validate --specs` passes for all 5 specs.
