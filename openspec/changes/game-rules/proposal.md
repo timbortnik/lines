@@ -15,11 +15,12 @@ The project has its toolchain, deploys and quality controls, but no game yet. Th
   - lines of 5 or more same-colored balls through the moved ball, in any of the 4 directions, are removed and scored, and the player gets a free move;
   - otherwise the next balls appear, any lines they form are removed and scored, and 3 new next balls are chosen;
   - scoring doubles with length: 10 × 2^(n−5) points for n balls removed at once;
+  - when a removal leaves the board without balls, 5 new balls are placed and the score is kept;
   - the game is over when the board is full after balls appear.
 - **Injected randomness.** Every random choice comes from a function the caller passes in, so tests are deterministic.
 - **A turn record.** It lists what happened, in order (the path, any jump, removals, appearances, the new next balls, game over), so `playable-board` can animate exactly that.
 - **Game state as plain data**, which survives a JSON round trip, so `save-and-resume` can store it.
-- **A 100% coverage gate** in `npm test` for the rules module. It counts modules no test imports, so an untested module can't slip through.
+- **A 100% coverage gate** in `npm test` for the rules module, covering lines, branches and functions. It counts modules no test imports, at any depth, and rejects comments that switch coverage off, so untested code can't slip through.
 - **Minimum Node.js 22.8**, up from 22. The coverage thresholds need Node 22.8 or newer.
 
 ## Capabilities
@@ -44,6 +45,7 @@ The project has its toolchain, deploys and quality controls, but no game yet. Th
 - **New code:** `src/game/` and its tests under `test/`, with a guard test that loads every rules module.
 - **Changed files:**
   - `package.json`: the coverage flags in the `test` script, and `engines.node` raised to `>=22.8`;
+  - `package-lock.json`: `engines.node` raised to match;
   - `test/tsconfig.json`: it compiles all of `src/game/`;
   - `openspec/config.yaml`: the Node version in the project context;
   - the README's "Requirements" and "Testing" sections.

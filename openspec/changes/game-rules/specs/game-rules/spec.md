@@ -83,6 +83,17 @@ When a move removes no balls, the next balls SHALL appear on their cells. Any li
 - **WHEN** an appearing ball completes a line of 5 or more same-colored balls
 - **THEN** that line is removed and scored, and the player does not get an extra move
 
+### Requirement: Cleared board
+When a removal leaves no ball on the board, 5 new balls of random colors SHALL be placed on random cells that hold no next ball, none of them part of a line of 5 or more. The score SHALL be kept.
+
+#### Scenario: A move clears the board
+- **WHEN** a move removes the last balls on the board
+- **THEN** 5 new balls appear on cells without next balls, no line of 5 or more exists, the score includes the removal, and the next balls stay where they are
+
+#### Scenario: Appearing balls clear the board
+- **WHEN** appearing balls complete a line that removes every ball on the board
+- **THEN** 5 new balls are placed, and new next balls are then chosen on free cells
+
 ### Requirement: Scoring
 Removing n balls at once SHALL score 10 × 2^(n−5) points. Here n counts every ball removed by one move, or by one appearance of next balls, exactly once, even where lines cross.
 
@@ -110,7 +121,7 @@ The game SHALL be over when the board has no empty cell after next balls appear 
 - **THEN** the line is removed, and the game continues
 
 ### Requirement: Turn record
-Each accepted move SHALL return the new game state together with a record of what happened, in order. The record SHALL cover the ball's path, a displaced next ball, removed balls with the points they scored, appeared balls, the newly chosen next balls, and game over.
+Each accepted move SHALL return the new game state together with a record of what happened, in order. The record SHALL cover the ball's path, a displaced next ball, removed balls with the points they scored, appeared balls, a fresh position after the board is cleared, the newly chosen next balls, and game over.
 
 #### Scenario: Ordinary move
 - **WHEN** a move removes nothing

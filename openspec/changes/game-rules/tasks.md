@@ -2,11 +2,13 @@
 
 ## 1. Coverage gate and Node 22.8
 
-- [ ] 1.1 Raise the minimum Node version to 22.8: `engines.node` in `package.json`, the Node line in `openspec/config.yaml`'s context, and the README's "Requirements" section. Verify: all three say 22.8, and `npm ci` and `npm test` still pass on the maintainer's Node 22.22.1.
+- [ ] 1.1 Raise the minimum Node version to 22.8: `engines.node` in `package.json` and `package-lock.json`, the Node line in `openspec/config.yaml`'s context, and the README's "Requirements" section. Verify: all three say 22.8, and `npm ci` and `npm test` still pass on the maintainer's Node 22.22.1.
 - [ ] 1.2 Add `src/game/board.ts` (design §1) with its tests, the guard test `test/game/modules.test.ts`, `../src/game` in `test/tsconfig.json`'s `include`, and the coverage flags in the `test` script (design §6). Verify:
-  - `npm test` passes, reporting 100% lines and branches for `src/game`;
+  - `npm test` passes, reporting 100% lines, branches and functions for `src/game`;
   - it fails when one board test is removed;
-  - it fails when an untested module is added to `src/game/` that no test imports.
+  - it fails when a function no test calls is added;
+  - it fails when an untested module is added that no test imports, both directly in `src/game/` and in a subfolder;
+  - it fails when a `src/game` file contains a `node:coverage` comment.
 
   Revert each temporary edit afterwards.
 
@@ -45,14 +47,17 @@
   - fewer next balls when the board is nearly full;
   - the game ends when the board fills;
   - the game continues when the filling balls complete a line;
-  - moves are rejected after game over.
+  - moves are rejected after game over;
+  - a move that clears the board places 5 new balls without a line, keeps the score and leaves the next balls in place;
+  - appearing balls that clear the board lead to 5 new balls, then new next balls.
 
   Verify: `npm test` passes at 100% coverage.
 
 ## 5. Turn record, determinism, plain data
 
 - [ ] 5.1 Return the turn record (design §4). Add tests for:
-  - the event order of an ordinary move, a removing move, a move with a jump, and a move that ends the game;
+  - the event order of an ordinary move, a removing move, a move with a jump, a move that clears the board, and a move that ends the game;
+  - `move` never changes its input game;
   - the same state, move and seed give identical results;
   - a game state survives a JSON round trip, and play continues identically from it.
 
@@ -60,7 +65,11 @@
 
 ## 6. Documentation, review and pull request
 
-- [ ] 6.1 Add a sentence to the README's "Testing" section: the rules in `src/game/` must stay at 100% line and branch coverage. Verify: it matches the `test` script's flags.
+- [ ] 6.1 Update the README's "Testing" section:
+  - say that the rules in `src/game/` must stay at 100% line, branch and function coverage;
+  - correct the two sentences that will no longer hold: the test build now compiles all of `src/game/`, not only the modules tests import, and there are now more than two guard tests.
+
+  Verify: the section matches the `test` script and `test/tsconfig.json`.
 - [ ] 6.2 Run the pre-review skill on the local branch before its first push, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded, to go into the pull request description.
 - [ ] 6.3 Push the branch and open the implementation pull request. Verify: `test (22)`, `test (lts/*)` and CodeQL pass, and the coverage report in the CI log shows 100% for `src/game`.
 
