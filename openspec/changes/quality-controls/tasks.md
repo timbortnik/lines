@@ -2,7 +2,7 @@
 
 ## 1. Compiler checks
 
-- [ ] 1.1 Add `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns` and `noFallthroughCasesInSwitch` to `tsconfig.json` (design §1). Verify:
+- [x] 1.1 Add `noUnusedLocals`, `noUnusedParameters`, `noImplicitReturns` and `noFallthroughCasesInSwitch` to `tsconfig.json` (design §1). Verify:
   - `npm run build` and `npm test` pass;
   - each of these, added temporarily, makes `npm test` or `npm run build` fail: an unused variable, an unused parameter, a function that returns a value on only some paths, and a switch fall-through;
   - a parameter named `_event` compiles.
@@ -18,20 +18,25 @@
 
 ## 3. Security policy and settings
 
-- [ ] 3.1 Add `SECURITY.md` (design §3). Verify: it links to the repository's "Security and quality" tab, and its claims (no backend, data kept in the browser) match the code.
+- [x] 3.1 Add `SECURITY.md` (design §3). Verify: it links to the repository's "Security and quality" tab, and its claims (no backend, data kept in the browser) match the code.
+  - Done 2026-10-25: both links answer 200, and `src/` makes no network calls and stores nothing, which matches the scope claims.
 - [ ] 3.2 Maintainer: Settings → Advanced Security → **CodeQL analysis** → Set up → **Default**. Verify: a CodeQL check runs on the implementation pull request.
-- [ ] 3.3 Maintainer: Settings → Advanced Security → enable **Secret Protection**, then **Push protection**. Verify: the maintainer confirms both are on.
-- [ ] 3.4 Maintainer: Settings → Advanced Security → enable **Dependabot alerts** and **Dependabot security updates**. Verify:
+- [x] 3.3 Maintainer: Settings → Advanced Security → enable **Secret Protection**, then **Push protection**. Verify: the maintainer confirms both are on.
+  - Done 2026-10-25: the maintainer confirmed the security settings are enabled, push protection included (it requires Secret Protection). Not visible without authentication.
+- [x] 3.4 Maintainer: Settings → Advanced Security → enable **Dependabot alerts** and **Dependabot security updates**. Verify:
   - the maintainer confirms both are on;
   - the repository has no `.github/dependabot.yml`.
-- [ ] 3.5 Maintainer: Settings → Advanced Security → enable **Private vulnerability reporting**. Verify: `curl -s https://api.github.com/repos/timbortnik/lines/private-vulnerability-reporting` prints `"enabled": true`.
+  - Done 2026-10-25: the maintainer confirmed alerts and security updates are on, and there is no `.github/dependabot.yml`.
+- [x] 3.5 Maintainer: Settings → Advanced Security → enable **Private vulnerability reporting**. Verify: `curl -s https://api.github.com/repos/timbortnik/lines/private-vulnerability-reporting` prints `"enabled": true`.
+  - Done 2026-10-25: the API returns `{"enabled":true}`.
 
 ## 4. Pre-review skill and planning rule
 
 - [ ] 4.1 Write `.claude/skills/pre-review/SKILL.md` (design §5) for this repository, with no text taken from other projects. Verify:
   - Claude Code lists the skill;
   - every command in it runs as written in this repository.
-- [ ] 4.2 Add the rule from design §6 under `rules: tasks:` in `openspec/config.yaml`. Verify: `openspec instructions tasks --change quality-controls --json` lists it among the rules.
+- [x] 4.2 Add the rule from design §6 under `rules: tasks:` in `openspec/config.yaml`. Verify: `openspec instructions tasks --change quality-controls --json` lists it among the rules.
+  - Done 2026-10-25: `openspec instructions tasks` now lists the rule as the third task rule.
 - [ ] 4.3 Run the pre-review skill on this change's implementation branch, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded in the pull request description.
 
 ## Workflow follow-up
