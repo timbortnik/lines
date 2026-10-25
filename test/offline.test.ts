@@ -28,5 +28,6 @@ test('the offline file list names exactly the files the game needs', () => {
 
 test('the service worker is one classic script, without imports or exports', () => {
   assert.deepEqual(readdirSync('src/sw').sort(), ['sw.ts', 'tsconfig.json']);
-  assert.doesNotMatch(readFileSync('src/sw/sw.ts', 'utf8'), /^\s*(?:import|export)\b/m);
+  // Anywhere, not only at line starts: a classic script can't run `export {}`, `import(...)` or `import.meta`.
+  assert.doesNotMatch(readFileSync('src/sw/sw.ts', 'utf8'), /\b(?:import|export)\b/);
 });

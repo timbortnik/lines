@@ -45,12 +45,15 @@ async function storeAll(): Promise<void> {
 
 /** The page from the server if it answers within TIMEOUT, otherwise from the store. */
 async function page(event: FetchEvent): Promise<Response> {
-  const network = fetch(event.request, { cache: 'no-cache' });
+  const network = fresh(event.request);
   // Once the server has answered, even late, refresh the store so the next offline load gets this deploy.
-  // Failures need no handling here: the page is answered from the store below.
+  // Failures need no handling here: a failed page request is answered from the store below, and a failed
+  // refresh keeps the previous set.
   event.waitUntil(network.then((response) => (response.ok ? storeAll() : undefined)).catch(() => undefined));
   try {
     const response = await Promise.race([network, timeout(TIMEOUT)]);
+    // A server error, such as a hosting outage, would replace the game with an error page.
+    if (!response.ok) throw new Error(`${response.status}`);
     pageFromStore = false;
     return response;
   } catch {
@@ -65,14 +68,24 @@ async function page(event: FetchEvent): Promise<Response> {
 /** A file the page needs, from the same place as the page; from the other one only when that fails. */
 async function file(request: Request): Promise<Response> {
   const cache = await caches.open(CACHE);
-  if (pageFromStore) return (await cache.match(request)) ?? fetch(request, { cache: 'no-cache' });
+  if (pageFromStore) return (await cache.match(request)) ?? fresh(request);
   try {
-    return await fetch(request, { cache: 'no-cache' });
+    return await fresh(request);
   } catch (error) {
     const stored = await cache.match(request);
     if (stored === undefined) throw error;
     return stored;
   }
+}
+
+/**
+ * The server's current version of `request`, checked against the server even when the browser holds a copy.
+ * It fetches the URL, not the request: while starting this worker for a page load, Chrome requests the page
+ * itself, allowing its 10-minute cache, and hands that answer to fetch(request), ignoring `cache` here.
+ * Fetching by URL also follows redirects, which a page request leaves to the browser.
+ */
+function fresh(request: Request): Promise<Response> {
+  return fetch(request.url, { cache: 'no-cache' });
 }
 
 /**

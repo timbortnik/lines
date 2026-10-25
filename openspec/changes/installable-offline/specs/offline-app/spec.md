@@ -40,7 +40,7 @@ Every online load SHALL check the server for newer files, despite the hosting le
 - **THEN** every file comes from the new deploy
 
 ### Requirement: Files of one deploy
-A page load SHALL take all its files from one place: the server, or the stored files. The stored files SHALL always be a complete set from one deploy, refreshed as a whole after a load the server answered.
+A page load SHALL take all its files from one place: the server, or the stored files. The stored files SHALL be replaced only as a whole set, after a load the server answered.
 
 #### Scenario: Refresh interrupted
 - **WHEN** refreshing the stored files fails partway, for example because the connection drops

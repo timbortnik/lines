@@ -31,7 +31,7 @@ The project's goal is a game that can be installed and played offline after the 
 
 ## Out of Scope
 
-- **An in-page Install button.** The browser event behind it is Chromium-only. Browsers offer installing through their own menus. Chrome also needs a service worker that answers requests before it shows its automatic install prompt, and this change provides one.
+- **An in-page Install button.** The browser event behind it is Chromium-only. Browsers offer installing through their own menus. Chrome also needs a service worker that answers requests before it shows its automatic install prompt, according to its post "Revisiting Chrome's installability criteria"; this change provides one.
 - **"Update available" prompts, push notifications and background sync.** Network first makes the next load show a new deploy without any prompt.
 - **Reading saves written by a newer save format.** That belongs to the change that first alters the format. That change must never overwrite a save it can't read, since a force-refresh or an offline load can run older code than the code that wrote the save.
 - **Offline play over plain HTTP on a local network**, as used for phone testing. Browsers allow service workers only on HTTPS and localhost.

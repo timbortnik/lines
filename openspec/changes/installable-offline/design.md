@@ -39,11 +39,11 @@ Verified with TypeScript 7.0.2 in the scratchpad:
 - **The root tsconfig leaves out `src/sw`**, and `npm run build` becomes `tsc -p . && tsc -p src/sw`.
 - **One cast:** `self as unknown as ServiceWorkerGlobalScope`. The worker library types `self` for any kind of worker.
 - **A classic script with no imports.** A worker can only control pages at or below its own folder, and Pages can't send the header that widens that, so it must be `site/sw.js`. A guard test fails if the source gains an `import` or `export`.
-  - Alternative considered: a module worker. Its `{ type: 'module' }` support is not confirmed as Baseline widely available, and nothing here needs to share code with the page.
+  - Alternative considered: a module worker. Module workers have been Baseline only since January 2026, so not yet widely available, and nothing here needs to share code with the page.
 
 ### 3. What the worker does
 
-**The rule:** a page load takes all its files from one place, either the server or the store, and the store always holds one complete deploy.
+**The rule:** a page load takes all its files from one place, either the server or the store, and the store is only ever replaced as a whole set.
 
 - **The store** is one cache, `lines`. Only `storeAll()` writes it:
   - it reads `offline-files.json` and `cache.addAll`s every listed file with `cache: 'no-cache'`, so each is checked against the server through its ETag;
@@ -51,12 +51,13 @@ Verified with TypeScript 7.0.2 in the scratchpad:
   - then it deletes entries no longer listed.
 - **On install:** `storeAll()`, then `skipWaiting()`. A new worker takes over at the next load instead of after every tab closes. That's safe because old and new workers both fetch fresh files.
 - **Page requests** (`mode: 'navigate'`):
-  - **The server answers within 3 seconds:** its answer is returned, `pageFromStore = false`, and `storeAll()` refreshes the store in the background (`event.waitUntil`), so the next offline load gets this deploy.
-  - **The server fails or is slower:** the stored page is returned, and `pageFromStore = true`. A late answer still triggers the refresh.
+  - **The server answers within 3 seconds, without an error:** its answer is returned, `pageFromStore = false`, and `storeAll()` refreshes the store in the background (`event.waitUntil`), so the next offline load gets this deploy.
+  - **The server fails, answers with an error, or is slower:** the stored page is returned, and `pageFromStore = true`. A late answer still triggers the refresh.
   - **Nothing is stored yet:** it waits for the server after all.
 - **Other requests from the page:**
   - when `pageFromStore` is set, from the store, with the server only for something not stored;
   - otherwise from the server with `cache: 'no-cache'`, with no timeout, and the store only when the server fails.
+- **The worker fetches by URL, not with the page's request** (`fresh()`). Measured in headless Chrome: while starting an idle worker for a page load, Chrome requests the page itself, allowing its 10-minute cache, and hands that answer to `fetch(event.request)`, ignoring `cache: 'no-cache'`. A player returning within 10 minutes of a deploy got the old `index.html` with the new scripts. Fetching by URL also follows the server's redirects, which a page request would leave to the browser.
 - **Every response the worker returns is marked `Cache-Control: no-cache`.** Measured in headless Chrome: without this, Chrome's in-memory cache reused the previous load's files for a reload in the same tab within the 10 minutes, without asking the worker. The page then mixed a new `index.html` with old scripts.
 - **Other origins and non-GET requests** pass through untouched. The game makes none.
 
@@ -121,11 +122,7 @@ else warn(...)  // e.g. plain HTTP on a local network
   `id` is fixed now, so later edits to `start_url` don't make browsers treat it as a different app.
 - **The icon is full-bleed:** a dark background, with a game cell and a ball inside the central circle that masking keeps. So one image serves both as a plain and as a maskable icon.
 - **`index.html` gets** `<link rel="manifest">` and `<link rel="icon" href="icons/icon-192.png">`.
-- **The README documents the redraw**, at each size:
-
-  ```sh
-  google-chrome --headless --screenshot=site/icons/icon-512.png --window-size=512,512 icons/icon.svg
-  ```
+- **The README documents the redraw.**
 
 ### 7. Relative-URL guard
 
@@ -143,7 +140,7 @@ Any other new file type still fails until it's taught.
 A throwaway scratchpad server mimics Pages: `max-age=600` and ETags, optional delays, and it can be stopped. Driving headless Chrome over the DevTools protocol, the check covers:
 - the installability errors (`Page.getInstallabilityErrors`) and the parsed manifest;
 - offline play after one visit, with the server stopped;
-- a simulated deploy within the 10 minutes, both in the same tab and in a new browser process, with a control run that bypasses the worker and keeps the old files;
+- a simulated deploy within the 10 minutes that changes `index.html` as well as scripts, in the same tab, in a restarted browser and with the worker stopped, with a control run that bypasses the worker and keeps the old files;
 - a server answering after 5 seconds;
 - plain HTTP on a LAN address;
 - no `/favicon.ico` request.
@@ -151,6 +148,7 @@ A throwaway scratchpad server mimics Pages: `max-age=600` and ETags, optional de
 ## Risks / Trade-offs
 
 - **The first visit isn't controlled by the worker**, so its files load the usual way, and Chrome may reuse them from memory for 10 minutes in that tab → this only matters for a deploy within the first 10 minutes of someone's first visit. The install downloads the whole list anyway, so offline play is ready.
+- **The store can still mix deploys in narrow races:** a deploy that lands during a refresh, two refreshes overlapping across a deploy, or a late answer refreshing the store while a page loaded from it is still loading → each needs a deploy within the seconds a refresh takes; the next online load refreshes the store again.
 - **A network failure halfway through an online load** answers the failed files from the store, which can be the previous deploy → it needs a dropped connection mid-load right after a deploy, and a reload fixes it.
 - **A service worker registered on `localhost:8000` stays for that address.** Another project served there later passes through it → it only answers from its store when the server fails. The README says how to remove it.
 - **Every online load makes about two dozen small requests:** the page's own revalidations plus the background store refresh. Each is a `304` with no body, over one connection.
