@@ -26,4 +26,5 @@
 
 - [x] 4.1 Run the pre-review skill once on the whole branch, in a fresh read-only subagent, and apply the fixes the maintainer agrees to. Verify: findings and fixes are recorded for the pull request description.
   - Done 2026-10-25: a fresh subagent found a returning player could get the old page with new scripts (Chrome hands the worker its own cached page request); fixed by fetching by URL, reproduced before and passing after. Also applied, as approved: server errors fall back to the store, a stricter classic-script guard, narrower spec wording, a Baseline exception for the manifest in config.yaml, and wording fixes.
-- [ ] 4.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+- [x] 4.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+  - Done 2026-10-25: created the offline-app main spec (7 requirements) and widened site-delivery's relative-URL rule to the manifest and the offline file list; `openspec validate --specs` passes for all 7 specs.
