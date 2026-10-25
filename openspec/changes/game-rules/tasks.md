@@ -2,7 +2,7 @@
 
 ## 1. Coverage gate and Node 22.8
 
-- [x] 1.1 Raise the minimum Node version to 22.8: `engines.node` in `package.json` and `package-lock.json`, the Node line in `openspec/config.yaml`'s context, and the README's "Requirements" section. Verify: all three say 22.8, and `npm ci` and `npm test` still pass on the maintainer's Node 22.22.1.
+- [x] 1.1 Raise the minimum Node version to 22.8: `engines.node` in `package.json` and `package-lock.json`, the Node line in `openspec/config.yaml`'s context, and the README's "Requirements" section. Verify: all four say 22.8, and `npm ci` and `npm test` still pass on the maintainer's Node 22.22.1.
 - [x] 1.2 Add `src/game/board.ts` (design §1) with its tests, the guard test `test/game/modules.test.ts`, `../src/game` in `test/tsconfig.json`'s `include`, and the coverage flags in the `test` script (design §6). Verify:
   - `npm test` passes, reporting 100% lines, branches and functions for `src/game`;
   - it fails when one board test is removed;
@@ -88,7 +88,15 @@
     - the section now says that all of `src/game/` is compiled, and that the gate covers lines, branches and functions with no ignore comments;
     - it names the three guard tests (modules, relative URLs, dependencies);
     - checked against `package.json` and `test/tsconfig.json`.
-- [ ] 6.2 Run the pre-review skill on the local branch before its first push, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded, to go into the pull request description.
+- [x] 6.2 Run the pre-review skill on the local branch before its first push, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded, to go into the pull request description.
+  - Done 2026-10-25: a fresh read-only session ran the skill on the unpushed branch, breaking the code about 40 times in copies. All 5 findings were applied with the maintainer's approval:
+    - the module guard fails on file types other than `.ts`;
+    - the jump test asserts the exact turn record, and the refill test checks the refilled balls;
+    - the spec's next-ball sentence now matches the free move;
+    - `move` rejects an origin off the board (its new test fails without the fix);
+    - a wording nit in task 1.1.
+
+    Still 38 tests at 100% coverage. The report goes into the pull request description.
 - [ ] 6.3 Push the branch and open the implementation pull request. Verify: `test (22)`, `test (lts/*)` and CodeQL pass, and the coverage report in the CI log shows 100% for `src/game`.
 
 ## Workflow follow-up

@@ -55,7 +55,8 @@ export function points(count: number): number {
  * Returns null when the move isn't allowed. Never changes `game`.
  */
 export function move(game: Game, from: number, to: number, random: Random): Turn | null {
-  if (game.over || game.board[from] === EMPTY || game.board[to] !== EMPTY) return null;
+  // `> EMPTY` also rejects an origin off the board, where the lookup gives undefined.
+  if (game.over || !(game.board[from] > EMPTY) || game.board[to] !== EMPTY) return null;
   const path = findPath(game.board, from, to);
   if (path === null) return null;
 

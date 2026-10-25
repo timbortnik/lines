@@ -21,7 +21,7 @@ A new game SHALL start with a score of 0 and 5 balls of random colors on random 
 - **THEN** exactly 5 cells hold balls, the score is 0, and no line of 5 or more same-colored balls exists
 
 ### Requirement: Next balls
-The game SHALL always know up to 3 next balls. Each has a random color and a random free cell: a cell that holds no ball and no other next ball. There SHALL be fewer than 3 only when fewer free cells remain.
+The game SHALL always know up to 3 next balls. Each has a random color and a random free cell: a cell that holds no ball and no other next ball. There SHALL be fewer than 3 only when fewer free cells remained when they were chosen.
 
 #### Scenario: Plenty of room
 - **WHEN** a new game starts

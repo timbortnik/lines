@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { EMPTY, cellAt } from '../../src/game/board.ts';
 import { START_BALLS, move } from '../../src/game/game.ts';
-import type { Game, TurnEvent } from '../../src/game/game.ts';
-import { balls, boardOf, gameOf, hasLine, patternBoard, seeded } from './helpers.ts';
+import type { Game, Random, TurnEvent } from '../../src/game/game.ts';
+import { balls, boardOf, gameOf, hasLine, patternBoard, seeded, sequence } from './helpers.ts';
 
 const types = (events: TurnEvent[]): string[] => events.map((event) => event.type);
 const NEXT = [
@@ -13,8 +13,8 @@ const NEXT = [
 ];
 
 /** Plays a move that must be accepted. */
-function play(game: Game, from: number, to: number, seed = 1) {
-  const turn = move(game, from, to, seeded(seed));
+function play(game: Game, from: number, to: number, random: Random = seeded(1)) {
+  const turn = move(game, from, to, random);
   assert.ok(turn !== null, 'the move should be accepted');
   return turn;
 }
@@ -27,6 +27,7 @@ test('rejected moves return null and leave the game unchanged', () => {
   assert.equal(move(game, cellAt(7, 0), cellAt(8, 8), seeded(1)), null, 'empty origin');
   assert.equal(move(game, cellAt(8, 0), cellAt(3, 4), seeded(1)), null, 'occupied destination');
   assert.equal(move(game, cellAt(8, 0), cellAt(4, 4), seeded(1)), null, 'no route');
+  assert.equal(move(game, cellAt(9, 4), cellAt(8, 8), seeded(1)), null, 'origin off the board');
   assert.deepEqual(game, before);
 });
 
@@ -40,15 +41,16 @@ test('a route may cross a cell holding a next ball', () => {
 test('a next ball the moving ball lands on jumps to a free cell and keeps its color', () => {
   const board = boardOf(['', '', '', '', '', '', '', '', '........1']);
   const next = [{ cell: cellAt(8, 7), color: 3 }, ...NEXT.slice(0, 2)];
-  const turn = play(gameOf(board, next), cellAt(8, 8), cellAt(8, 7));
-  const jumped = turn.events[1];
-  assert.ok(jumped.type === 'jumped');
-  assert.equal(jumped.from, cellAt(8, 7));
-  assert.equal(jumped.color, 3);
-  assert.ok(![cellAt(8, 7), cellAt(0, 0), cellAt(0, 1)].includes(jumped.to), 'not on a ball or another next ball');
-  assert.equal(turn.game.board[jumped.to], 3, 'it then appears there');
+  // A first draw of 0 takes the lowest free cell: (0, 2), because (0, 0) and (0, 1) hold the other next balls.
+  const turn = play(gameOf(board, next), cellAt(8, 8), cellAt(8, 7), sequence([0], seeded(1)));
+  assert.deepEqual(turn.events, [
+    { type: 'moved', path: [cellAt(8, 8), cellAt(8, 7)] },
+    { type: 'jumped', from: cellAt(8, 7), to: cellAt(0, 2), color: 3 },
+    { type: 'appeared', balls: [{ cell: cellAt(0, 2), color: 3 }, ...NEXT.slice(0, 2)] },
+    { type: 'chosen', balls: turn.game.next },
+  ]);
+  assert.equal(turn.game.board[cellAt(0, 2)], 3, 'it then appears there');
   assert.equal(turn.game.board[cellAt(8, 7)], 1);
-  assert.deepEqual(types(turn.events), ['moved', 'jumped', 'appeared', 'chosen']);
 });
 
 test('a completed line of five is removed, scores 10, and gives a free move', () => {
@@ -116,6 +118,11 @@ test('a move that clears the board places 5 new balls, keeps the score and the n
   assert.deepEqual(turn.game.next, NEXT);
   const placed = balls(turn.game.board);
   assert.equal(placed.length, START_BALLS);
+  const refilled = turn.events[2];
+  assert.ok(refilled.type === 'refilled');
+  const shown = boardOf([]);
+  for (const ball of refilled.balls) shown[ball.cell] = ball.color;
+  assert.deepEqual(shown, turn.game.board, 'the record lists exactly the balls placed');
   for (const ball of NEXT) assert.ok(!placed.includes(ball.cell), 'not on a next ball');
   assert.equal(hasLine(turn.game.board), false);
 });
