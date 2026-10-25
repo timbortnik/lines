@@ -39,7 +39,7 @@ One-time steps, in the order GitHub documents:
 3. After the first deploy, set Settings → Pages → Custom domain to `lines.bortnik.org`. Only then create the DNS record: CNAME `lines` → `timbortnik.github.io`.
 4. Tick **Enforce HTTPS** once GitHub offers it, which can take up to 24 hours.
 
-No `CNAME` file is needed in the repository: deploys from GitHub Actions ignore it.
+No `CNAME` file is needed in the repository: deploys from GitHub Actions ignore it. Once the custom domain is set, the old address https://timbortnik.github.io/lines/ redirects to it.
 
 ## Planning changes
 
