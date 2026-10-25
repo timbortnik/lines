@@ -28,8 +28,8 @@ context: |
   - Hosted on GitHub Pages at https://lines.bortnik.org (custom domain; the address must never
     change, since saved games and installs are tied to it), deployed by GitHub Actions on push
     to main. All URLs must be relative, so the site works both at a domain root and under a subpath.
-  - Every change lands as two pull requests: first the plan (OpenSpec files only), then the
-    implementation, which also archives the change if all its tasks are done before merging.
+  - Every change lands as one pull request: its plan, agreed with the maintainer in chat first,
+    its implementation and its archive, all on one branch.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.
@@ -39,7 +39,9 @@ rules:
   tasks:
     - Every task leaves main deployable, with tests passing.
     - Every change to the game rules module comes with unit tests.
-    - Run the pre-review skill on the implementation branch before its first push; only tasks that need the pull request come after it.
+    - End with two tasks, in this order and before the branch is first pushed. Run the pre-review skill once on the whole branch, then archive the change.
+    - Add no tasks for pull request checks; the main ruleset already requires them before merging.
+    - Keep each task's completion note to one line.
 
 # Per-operation guidance (optional)
 # Add advisory guidance for how apply and archive work should be conducted.
