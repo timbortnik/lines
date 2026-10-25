@@ -97,7 +97,12 @@
     - a wording nit in task 1.1.
 
     Still 38 tests at 100% coverage. The report goes into the pull request description.
-- [ ] 6.3 Push the branch and open the implementation pull request. Verify: `test (22)`, `test (lts/*)` and CodeQL pass, and the coverage report in the CI log shows 100% for `src/game`.
+- [x] 6.3 Push the branch and open the implementation pull request. Verify: `test (22)`, `test (lts/*)` and CodeQL pass, and the coverage report in the CI log shows 100% for `src/game`.
+  - Done 2026-10-25:
+    - PR #10, run 40214014367: `test (22)`, `test (lts/*)`, "Analyze (javascript-typescript)", "Analyze (actions)" and CodeQL all passed;
+    - the maintainer reported the run green;
+    - the job logs need admin rights, so the coverage table wasn't read here. The `test` script's 100% thresholds make a passing test job impossible below 100%.
+    - #10 was merged before the archive commit, so this record and the archive land in a follow-up pull request.
 
 ## Workflow follow-up
 
