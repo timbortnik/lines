@@ -1,0 +1,163 @@
+/* Everything the game looks like. The scripts only add and remove elements and classes, and animate them. */
+
+:root {
+  --gutter: 16px;
+  --bar: 48px;
+  /* The board is square and as large as the visible screen allows below the bar. */
+  --board: min(100dvw - 2 * var(--gutter), 100dvh - var(--bar) - 3 * var(--gutter));
+}
+
+html {
+  background: #2b2b2b;
+  color: #eee;
+  font: 18px/1.2 system-ui, sans-serif;
+  /* No pull-to-refresh, which would reload the page and lose the game. */
+  overscroll-behavior: none;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  /* No double-tap zoom, so quick taps reach the game; pinch zoom still works. */
+  touch-action: manipulation;
+}
+
+main {
+  display: grid;
+  justify-items: center;
+  gap: var(--gutter);
+  /* The bar needs about 360px. On a phone held sideways the board is narrower, and the bar is wider than it. */
+  width: max(var(--board), min(100dvw - 2 * var(--gutter), 360px));
+  margin: var(--gutter) auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gutter);
+  justify-self: stretch;
+  height: var(--bar);
+  font-size: min(18px, 4.5dvw);
+  white-space: nowrap;
+}
+
+button {
+  padding: 0.4em 0.9em;
+  border: 0;
+  border-radius: 6px;
+  background: #e0e0e0;
+  color: #222;
+  font: inherit;
+  cursor: pointer;
+}
+
+.preview {
+  display: flex;
+  gap: 4px;
+}
+
+.preview .ball {
+  position: relative;
+  width: 1.75em;
+  height: 1.75em;
+}
+
+/* The board and the game-over message share one grid area, so the message covers the board. */
+.play {
+  display: grid;
+}
+
+.play > * {
+  grid-area: 1 / 1;
+}
+
+.board {
+  display: grid;
+  grid-template: repeat(9, 1fr) / repeat(9, 1fr);
+  width: var(--board);
+  aspect-ratio: 1;
+}
+
+/* No borders or gaps: a ball's box must be exactly one cell, so animate.ts can move it by 100% per cell. */
+.cell {
+  position: relative;
+  background: #c4c4c4;
+  box-shadow: inset 2px 2px #ececec, inset -2px -2px #7a7a7a;
+  cursor: pointer;
+}
+
+.cell.selected {
+  background: #dadada;
+  box-shadow: inset 0 0 0 3px #555;
+}
+
+.ball {
+  position: absolute;
+  inset: 0;
+}
+
+.ball::before {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgb(255 255 255 / 0.9), transparent 30%),
+    radial-gradient(circle closest-side, transparent 55%, rgb(0 0 0 / 0.45)),
+    var(--color);
+}
+
+/* A next ball, shown small. animate.ts grows it from the same scale when it appears. */
+.ball.next::before {
+  transform: scale(0.4);
+}
+
+/* A walking ball passes over the cells after its own, so it must be drawn above them. */
+.ball.moving {
+  z-index: 1;
+}
+
+.selected .ball {
+  animation: bounce 0.25s ease-out infinite alternate;
+}
+
+@keyframes bounce {
+  to {
+    transform: translateY(-12%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .selected .ball {
+    animation: none;
+  }
+}
+
+.c1 { --color: #e53935; }
+.c2 { --color: #43a047; }
+.c3 { --color: #1e6fe0; }
+.c4 { --color: #fdd835; }
+.c5 { --color: #9c27b0; }
+.c6 { --color: #00bcd4; }
+.c7 { --color: #8d5524; }
+
+/* The cells are positioned, so without a z-index they would be drawn, and tapped, above the message. */
+.over {
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgb(0 0 0 / 0.65);
+  font-size: 1.5em;
+}
+
+/* The display above would otherwise override the hidden attribute. */
+.over[hidden] {
+  display: none;
+}
+
+.over p {
+  margin: 0 0 0.6em;
+}

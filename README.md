@@ -2,7 +2,7 @@
 
 An open-source browser version of **Color Lines**, also known as **Lines98**: move balls on a 9×9 board to line up five or more of the same color. It is becoming an installable web app that works offline and keeps your game on your device, with no backend.
 
-Work in progress: https://lines.bortnik.org shows a placeholder for now.
+Play it at https://lines.bortnik.org. Saving your game and playing offline are still to come.
 
 ## Requirements
 
@@ -16,7 +16,7 @@ npm run build                     # compile src/ into site/js/
 python3 -m http.server -d site    # or any other static file server
 ```
 
-Then open http://localhost:8000.
+Then open http://localhost:8000. While editing, run `npx tsc -p . --watch` in a second terminal: it recompiles on every save, and a reload shows the change.
 
 ## Testing
 
@@ -27,6 +27,8 @@ npm test
 This compiles `test/` and all of `src/game/` into `build/`, then runs the tests with Node's built-in test runner. Failures point at lines in the TypeScript sources.
 
 The game rules in `src/game/` must stay at 100% line, branch and function coverage. A guard test loads every module there, so an untested module can't hide, and it rejects `node:coverage` ignore comments. Other guard tests keep the site's own URLs relative and the dependencies limited to `typescript` and `@types/node`.
+
+The user interface in `src/main.ts` and `src/ui/` has no unit tests, since they would need a DOM library. It only draws, animates and passes taps to the rules, and is checked in a browser.
 
 ## Deploys
 
