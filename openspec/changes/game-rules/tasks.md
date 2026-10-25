@@ -79,11 +79,15 @@
 
 ## 6. Documentation, review and pull request
 
-- [ ] 6.1 Update the README's "Testing" section:
+- [x] 6.1 Update the README's "Testing" section:
   - say that the rules in `src/game/` must stay at 100% line, branch and function coverage;
   - correct the two sentences that will no longer hold: the test build now compiles all of `src/game/`, not only the modules tests import, and there are now more than two guard tests.
 
   Verify: the section matches the `test` script and `test/tsconfig.json`.
+  - Done 2026-10-25:
+    - the section now says that all of `src/game/` is compiled, and that the gate covers lines, branches and functions with no ignore comments;
+    - it names the three guard tests (modules, relative URLs, dependencies);
+    - checked against `package.json` and `test/tsconfig.json`.
 - [ ] 6.2 Run the pre-review skill on the local branch before its first push, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded, to go into the pull request description.
 - [ ] 6.3 Push the branch and open the implementation pull request. Verify: `test (22)`, `test (lts/*)` and CodeQL pass, and the coverage report in the CI log shows 100% for `src/game`.
 
