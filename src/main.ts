@@ -30,6 +30,13 @@ if (game.over) {
   render(view, game, best);
 }
 
+// Offline play, and newer files on every online load: see src/sw/sw.ts.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch((error) => console.warn('Offline play is unavailable.', error));
+} else {
+  console.warn('Offline play is unavailable: service workers need HTTPS or localhost.');
+}
+
 async function tap(cell: number): Promise<void> {
   if (busy || game.over) return;
   if (game.board[cell] !== EMPTY) {

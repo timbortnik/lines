@@ -17,5 +17,6 @@
     "rootDir": "src",
     "outDir": "site/js"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "exclude": ["src/sw"]
 }

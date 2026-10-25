@@ -15,7 +15,8 @@ context: |
   - Browser platform APIs only: DOM elements as sprites, CSS for drawing, the Web Animations API
     for motion, localStorage for saves, a hand-written service worker and manifest.
     No UI frameworks, game engines, bundlers or PWA plugins.
-  - Use only web features that are Baseline "widely available".
+  - Use only web features that are Baseline "widely available", except the web app manifest,
+    which browsers without it ignore.
   - Input: mouse or touchpad on desktop, touch on mobile. Keyboard play and
     screen-reader support are out of scope.
   - TypeScript with `erasableSyntaxOnly`. `tsc` type-checks and compiles to ES modules

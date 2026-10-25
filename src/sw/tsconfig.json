@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // The worker's globals instead of the page's: the dom and webworker libraries clash in one build.
+    "lib": ["es2023", "webworker"],
+    // Under nodenext, package.json's "type": "module" would make sw.ts a module and add `export {}`,
+    // which a classic service worker can't run.
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "rootDir": ".",
+    // A service worker controls only pages at or below its own folder, so it goes to the site root.
+    "outDir": "../../site"
+  },
+  "include": ["."],
+  // The root config leaves this folder out of the page build; that must not carry over to here.
+  "exclude": []
+}

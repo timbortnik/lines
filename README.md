@@ -1,8 +1,8 @@
 # Lines
 
-An open-source browser version of **Color Lines**, also known as **Lines98**: move balls on a 9×9 board to line up five or more of the same color. It is becoming an installable web app that works offline and keeps your game on your device, with no backend.
+An open-source browser version of **Color Lines**, also known as **Lines98**: move balls on a 9×9 board to line up five or more of the same color. It is an installable web app that works offline and keeps your game on your device, with no backend.
 
-Play it at https://lines.bortnik.org. Your game and best score are saved in your browser on your device, so a reload or restart picks up where you left off. Playing offline and installing are still to come.
+Play it at https://lines.bortnik.org. Your game and best score are saved in your browser on your device, so a reload or restart picks up where you left off. After your first visit it also plays without a network, and browsers offer to install it as an app.
 
 ## Requirements
 
@@ -12,11 +12,13 @@ Node.js 22.8 or newer. Builds that can't run TypeScript files directly, such as 
 
 ```sh
 npm ci                            # install the two dev dependencies
-npm run build                     # compile src/ into site/js/
+npm run build                     # compile src/ into site/js/, and the service worker into site/sw.js
 python3 -m http.server -d site    # or any other static file server
 ```
 
-Then open http://localhost:8000. While editing, run `npx tsc -p . --watch` in a second terminal: it recompiles on every save, and a reload shows the change.
+Then open http://localhost:8000. While editing, run `npx tsc -p . --watch` in a second terminal: it recompiles on every save, and a reload shows the change. The service worker has its own build, `npx tsc -p src/sw`.
+
+The service worker, which makes offline play work, runs only on HTTPS and on localhost. Over plain HTTP from another device, such as a phone on the same network, the game plays but not offline. A worker registered on `localhost:8000` stays registered for that address; to remove it, use Chrome's DevTools → Application → Service workers → Unregister.
 
 ## Testing
 
@@ -26,9 +28,18 @@ npm test
 
 This compiles `test/` and all of `src/game/` into `build/`, then runs the tests with Node's built-in test runner. Failures point at lines in the TypeScript sources.
 
-The game rules in `src/game/` must stay at 100% line, branch and function coverage. A guard test loads every module there, so an untested module can't hide, and it rejects `node:coverage` ignore comments. Other guard tests keep the site's own URLs relative and the dependencies limited to `typescript` and `@types/node`.
+The game rules in `src/game/` must stay at 100% line, branch and function coverage. A guard test loads every module there, so an untested module can't hide, and it rejects `node:coverage` ignore comments. Other guard tests keep the site's own URLs relative, the list of files stored for offline play (`site/offline-files.json`) complete, the service worker a single script, and the dependencies limited to `typescript` and `@types/node`.
 
 The user interface in `src/main.ts` and `src/ui/` has no unit tests, since they would need a DOM library. It only draws, animates and passes taps to the rules, and is checked in a browser.
+
+## Icons
+
+The PNGs in `site/icons/` are drawn from `icons/icon.svg`. After changing it, redraw them with headless Chrome:
+
+```sh
+google-chrome --headless --hide-scrollbars --screenshot=site/icons/icon-192.png --window-size=192,192 icons/icon.svg
+google-chrome --headless --hide-scrollbars --screenshot=site/icons/icon-512.png --window-size=512,512 icons/icon.svg
+```
 
 ## Deploys
 

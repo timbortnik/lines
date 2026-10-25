@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Lines",
+  "short_name": "Lines",
+  "description": "Color Lines (Lines98): line up five balls of a color on a 9×9 board.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#2b2b2b",
+  "theme_color": "#2b2b2b",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
