@@ -14,6 +14,8 @@ export interface View {
   finalScore: HTMLElement;
   newBest: HTMLElement;
   newGameButtons: HTMLElement[];
+  /** Asks before an unfinished game is replaced. */
+  confirm: HTMLDialogElement;
 }
 
 /** Finds the page's elements and fills the board with empty cells. */
@@ -23,16 +25,17 @@ export function createView(): View {
     cell.className = 'cell';
     return cell;
   });
-  byId('board').replaceChildren(...cells);
+  byId('board', HTMLElement).replaceChildren(...cells);
   return {
     cells,
-    score: byId('score'),
-    best: byId('best'),
-    preview: byId('preview'),
-    over: byId('over'),
-    finalScore: byId('final-score'),
-    newBest: byId('new-best'),
-    newGameButtons: [byId('new-game'), byId('play-again')],
+    score: byId('score', HTMLElement),
+    best: byId('best', HTMLElement),
+    preview: byId('preview', HTMLElement),
+    over: byId('over', HTMLElement),
+    finalScore: byId('final-score', HTMLElement),
+    newBest: byId('new-best', HTMLElement),
+    newGameButtons: [byId('new-game', HTMLElement), byId('play-again', HTMLElement)],
+    confirm: byId('confirm', HTMLDialogElement),
   };
 }
 
@@ -69,8 +72,8 @@ export function showPreview(view: View, next: Ball[]): void {
   view.preview.replaceChildren(...next.map((ball) => ballElement(ball.color)));
 }
 
-function byId(id: string): HTMLElement {
+function byId<T extends HTMLElement>(id: string, type: new () => T): T {
   const element = document.getElementById(id);
-  if (element === null) throw new Error(`The page has no element with id "${id}"`);
+  if (!(element instanceof type)) throw new Error(`The page has no ${type.name} with id "${id}"`);
   return element;
 }

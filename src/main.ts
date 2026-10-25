@@ -18,6 +18,9 @@ let busy = false;
 
 view.cells.forEach((cell, index) => cell.addEventListener('click', () => void tap(index)));
 for (const button of view.newGameButtons) button.addEventListener('click', requestNewGame);
+view.confirm.addEventListener('close', () => {
+  if (view.confirm.returnValue === 'new') startNewGame();
+});
 
 if (game.over) {
   // A finished game isn't resumed.
@@ -51,9 +54,16 @@ async function tap(cell: number): Promise<void> {
   }
 }
 
+/** Starts a new game, asking first while the current one isn't over. */
 function requestNewGame(): void {
   if (busy) return;
-  startNewGame();
+  if (game.over) {
+    startNewGame();
+    return;
+  }
+  // Escape closes the dialog without setting a value, so clear the previous answer first.
+  view.confirm.returnValue = '';
+  view.confirm.showModal();
 }
 
 /** Ends the current game, counting its score towards the best, and starts a new one. */
