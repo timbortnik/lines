@@ -29,6 +29,10 @@ The project SHALL provide one test command that compiles the tests together with
 - **THEN** the command exits with a non-zero status
 - **AND** the failure report points to the line in the TypeScript test source
 
+#### Scenario: A test is deleted
+- **WHEN** a test file is deleted or renamed
+- **THEN** the next run of the test command no longer runs it under its old name
+
 #### Scenario: Type error in tested code
 - **WHEN** a test or a module it imports has a type error
 - **THEN** the test command exits with a non-zero status without running any tests

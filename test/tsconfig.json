@@ -1,0 +1,11 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "types": ["node"],
+    "inlineSources": false,
+    "rootDir": "..",
+    "outDir": "../build"
+  },
+  "include": ["."]
+}

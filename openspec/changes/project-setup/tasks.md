@@ -2,30 +2,31 @@
 
 ## 1. Branch, toolchain, build and placeholder page
 
-- [ ] 1.1 Once the plan pull request is squash-merged, run `git switch main && git pull --ff-only`, then `git switch -c project-setup`. Verify: `openspec/changes/project-setup/` exists on the new branch, and `git log --oneline -1` shows the plan's squash commit.
-- [ ] 1.2 Create `package.json`: private, `"type": "module"`, `engines.node` `>=22`, license MIT. Install `typescript@^7.0.2` and `@types/node@^22` as dev dependencies and commit `package-lock.json`. Verify: `npm ci` succeeds, and `npm ls --depth=0` lists exactly those two packages.
-- [ ] 1.3 Add `.gitignore` for `node_modules/`, `site/js/` and `build/`. Verify: after 1.4, `git status` shows nothing from those folders.
-- [ ] 1.4 Add `tsconfig.json` (browser settings from design §2), the `build` script, `site/index.html` (loads `js/main.js` as a module and shows "Loading…") and `src/main.ts` (replaces that text with "Coming soon"). Verify:
+- [x] 1.1 Once the plan pull request is squash-merged, run `git switch main && git pull --ff-only`, then `git switch -c project-setup`. Verify: `openspec/changes/project-setup/` exists on the new branch, and `git log --oneline -1` shows the plan's squash commit.
+- [x] 1.2 Create `package.json`: private, `"type": "module"`, `engines.node` `>=22`, license MIT. Install `typescript@^7.0.2` and `@types/node@^22` as dev dependencies and commit `package-lock.json`. Verify: `npm ci` succeeds, and `npm ls --depth=0` lists exactly those two packages.
+- [x] 1.3 Add `.gitignore` for `node_modules/`, `site/js/` and `build/`. Verify: after 1.4, `git status` shows nothing from those folders.
+- [x] 1.4 Add `tsconfig.json` (browser settings from design §2), the `build` script, `site/index.html` (loads `js/main.js` as a module and shows "Loading…") and `src/main.ts` (replaces that text with "Coming soon"). Verify:
   - `npm run build` exits 0 and writes `site/js/main.js` and `site/js/main.js.map`;
   - serving `site/` with a static file server shows "Coming soon";
   - a deliberate type error in `src/` makes `npm run build` exit non-zero (revert it afterwards).
-- [ ] 1.5 Write `README.md` covering what the project is, the requirements (Node ≥ 22), and how to build and run it locally. Note that OpenSpec is needed only by people planning changes. Verify: every command in the README runs as written.
+- [x] 1.5 Write `README.md` covering what the project is, the requirements (Node ≥ 22), and how to build and run it locally. Note that OpenSpec is needed only by people planning changes. Verify: every command in the README runs as written.
 
 ## 2. Tests and guards
 
-- [ ] 2.1 Add `test/tsconfig.json` (test settings from design §2), the `test` script, and `test/site.test.ts`, the relative-URL guard from design §5. Verify:
+- [x] 2.1 Add `test/tsconfig.json` (test settings from design §2), the `test` script, and `test/site.test.ts`, the relative-URL guard from design §5. Verify:
   - `npm test` passes;
   - it fails when `site/index.html` refers to `/js/main.js`, `https://lines.bortnik.org/js/main.js` or `https://github.com/timbortnik/lines`, in double or single quotes;
   - it fails when a file type it doesn't check, such as an empty `site/x.css`, is added.
 
   Revert each temporary edit afterwards.
-- [ ] 2.2 Add `test/dependencies.test.ts`, the dependency guard from design §4. Verify: `npm test` passes, and fails after `npm install -D` or `npm install -O` of any package (revert it afterwards).
-- [ ] 2.3 Check the test command's failure modes, reverting each temporary edit afterwards. Verify:
+- [x] 2.2 Add `test/dependencies.test.ts`, the dependency guard from design §4. Verify: `npm test` passes, and fails after `npm install -D` or `npm install -O` of any package (revert it afterwards).
+- [x] 2.3 Check the test command's failure modes, reverting each temporary edit afterwards. Verify:
   - a failing assertion makes `npm test` exit non-zero, and its report points to the `test/*.test.ts` line;
   - a type error in a test exits non-zero before any test runs;
-  - a test importing a `src/` module that reads `document` fails with a type error.
-- [ ] 2.4 Run `npm test` and `npm run build` on a Node 22 build without TypeScript support (the maintainer's Ubuntu Node 22.22.1). Verify: both succeed.
-- [ ] 2.5 Add a "Testing" section to `README.md`. Verify: the documented command runs as written.
+  - a test importing a `src/` module that reads `document` fails with a type error;
+  - a test file deleted from `test/` no longer runs on the next `npm test`.
+- [x] 2.4 Run `npm test` and `npm run build` on a Node 22 build without TypeScript support (the maintainer's Ubuntu Node 22.22.1). Verify: both succeed.
+- [x] 2.5 Add a "Testing" section to `README.md`. Verify: the documented command runs as written.
 
 ## 3. Continuous integration and deployment workflow
 
@@ -42,7 +43,7 @@
   - GitHub shows merging as blocked.
 
   Then close the pull request and delete the branch.
-- [ ] 3.4 Add a "Deploys" section to `README.md` covering how changes land (pull request, required checks, squash merge), what triggers a deploy, and what is published where. Verify: it matches the workflow file and the ruleset.
+- [x] 3.4 Add a "Deploys" section to `README.md` covering how changes land (pull request, required checks, squash merge), what triggers a deploy, and what is published where. Verify: it matches the workflow file and the ruleset.
 
 ## 4. Hosting at lines.bortnik.org (maintainer steps, in GitHub's documented order)
 
@@ -50,7 +51,7 @@
   - Done 2026-10-25. The TXT record `_github-pages-challenge-timbortnik.bortnik.org` resolves over DNS-over-HTTPS (Google and Cloudflare), and the maintainer confirmed that GitHub shows the domain as verified.
 - [x] 4.2 Maintainer: in the repository, set Settings → Pages → Build and deployment → Source to **GitHub Actions**. Verify: the setting shows "GitHub Actions".
   - Done 2026-10-25, as confirmed by the maintainer. The public API now reports `has_pages: true` (it was `false`). The source type itself is only visible with authentication; the first deploy in 4.4 exercises it.
-- [ ] 4.3 Add a "Hosting setup (maintainers)" section to `README.md` listing steps 4.1, 4.2, 4.5 and 4.6. Verify: the order matches design §7.
+- [x] 4.3 Add a "Hosting setup (maintainers)" section to `README.md` listing steps 4.1, 4.2, 4.5 and 4.6. Verify: the order matches design §7.
 - [ ] 4.4 Squash-merge the `project-setup` pull request, then run `git switch main && git pull --ff-only`. Verify:
   - `main` gained exactly one commit;
   - the `deploy` job succeeds;
