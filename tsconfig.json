@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2023",
+    "module": "nodenext",
+    "lib": ["es2023", "dom"],
+    "types": [],
+    "strict": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "rewriteRelativeImportExtensions": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "rootDir": "src",
+    "outDir": "site/js"
+  },
+  "include": ["src"]
+}

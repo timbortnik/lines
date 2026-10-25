@@ -2,14 +2,14 @@
 
 ## 1. Branch, toolchain, build and placeholder page
 
-- [ ] 1.1 Once the plan pull request is squash-merged, run `git switch main && git pull --ff-only`, then `git switch -c project-setup`. Verify: `openspec/changes/project-setup/` exists on the new branch, and `git log --oneline -1` shows the plan's squash commit.
-- [ ] 1.2 Create `package.json`: private, `"type": "module"`, `engines.node` `>=22`, license MIT. Install `typescript@^7.0.2` and `@types/node@^22` as dev dependencies and commit `package-lock.json`. Verify: `npm ci` succeeds, and `npm ls --depth=0` lists exactly those two packages.
-- [ ] 1.3 Add `.gitignore` for `node_modules/`, `site/js/` and `build/`. Verify: after 1.4, `git status` shows nothing from those folders.
-- [ ] 1.4 Add `tsconfig.json` (browser settings from design §2), the `build` script, `site/index.html` (loads `js/main.js` as a module and shows "Loading…") and `src/main.ts` (replaces that text with "Coming soon"). Verify:
+- [x] 1.1 Once the plan pull request is squash-merged, run `git switch main && git pull --ff-only`, then `git switch -c project-setup`. Verify: `openspec/changes/project-setup/` exists on the new branch, and `git log --oneline -1` shows the plan's squash commit.
+- [x] 1.2 Create `package.json`: private, `"type": "module"`, `engines.node` `>=22`, license MIT. Install `typescript@^7.0.2` and `@types/node@^22` as dev dependencies and commit `package-lock.json`. Verify: `npm ci` succeeds, and `npm ls --depth=0` lists exactly those two packages.
+- [x] 1.3 Add `.gitignore` for `node_modules/`, `site/js/` and `build/`. Verify: after 1.4, `git status` shows nothing from those folders.
+- [x] 1.4 Add `tsconfig.json` (browser settings from design §2), the `build` script, `site/index.html` (loads `js/main.js` as a module and shows "Loading…") and `src/main.ts` (replaces that text with "Coming soon"). Verify:
   - `npm run build` exits 0 and writes `site/js/main.js` and `site/js/main.js.map`;
   - serving `site/` with a static file server shows "Coming soon";
   - a deliberate type error in `src/` makes `npm run build` exit non-zero (revert it afterwards).
-- [ ] 1.5 Write `README.md` covering what the project is, the requirements (Node ≥ 22), and how to build and run it locally. Note that OpenSpec is needed only by people planning changes. Verify: every command in the README runs as written.
+- [x] 1.5 Write `README.md` covering what the project is, the requirements (Node ≥ 22), and how to build and run it locally. Note that OpenSpec is needed only by people planning changes. Verify: every command in the README runs as written.
 
 ## 2. Tests and guards
 
