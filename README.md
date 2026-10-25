@@ -2,7 +2,7 @@
 
 An open-source browser version of **Color Lines**, also known as **Lines98**: move balls on a 9×9 board to line up five or more of the same color. It is becoming an installable web app that works offline and keeps your game on your device, with no backend.
 
-Play it at https://lines.bortnik.org. Saving your game and playing offline are still to come.
+Play it at https://lines.bortnik.org. Your game and best score are saved in your browser on your device, so a reload or restart picks up where you left off. Playing offline and installing are still to come.
 
 ## Requirements
 

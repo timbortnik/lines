@@ -11,7 +11,8 @@
 
 ## 2. Documentation
 
-- [ ] 2.1 Update the README: the game is saved on the device. Verify: it matches the specs.
+- [x] 2.1 Update the README: the game is saved on the device. Verify: it matches the specs.
+  - Done 2026-10-25: the intro says the game and best score are kept in the browser on the device and resume after a reload; it matches the game-saving spec.
 
 ## 3. Review and archive
 
