@@ -10,7 +10,10 @@
 <body>
   <main>
     <header>
-      <span>Score <span id="score">0</span></span>
+      <span class="scores">
+        <span>Score <span id="score">0</span></span>
+        <span class="best">Best <span id="best">0</span></span>
+      </span>
       <span id="preview" class="preview"></span>
       <button id="new-game" type="button">New game</button>
     </header>
@@ -19,9 +22,19 @@
       <div id="over" class="over" hidden>
         <p>Game over</p>
         <p>Score <span id="final-score">0</span></p>
+        <p id="new-best" hidden>New best!</p>
         <button id="play-again" type="button">New game</button>
       </div>
     </div>
   </main>
+  <dialog id="confirm">
+    <form method="dialog">
+      <p>Start a new game? This one will be lost.</p>
+      <div class="choices">
+        <button value="keep">Keep playing</button>
+        <button value="new">New game</button>
+      </div>
+    </form>
+  </dialog>
 </body>
 </html>

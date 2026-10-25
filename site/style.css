@@ -52,6 +52,16 @@ button {
   cursor: pointer;
 }
 
+.scores {
+  display: flex;
+  flex-direction: column;
+}
+
+.best {
+  color: #bbb;
+  font-size: 0.7em;
+}
+
 .preview {
   display: flex;
   gap: 4px;
@@ -160,4 +170,28 @@ button {
 
 .over p {
   margin: 0 0 0.6em;
+}
+
+dialog {
+  border: 0;
+  border-radius: 8px;
+  padding: 1.2em;
+  background: #3a3a3a;
+  color: inherit;
+  box-sizing: border-box;
+  max-width: calc(100% - 2 * var(--gutter));
+}
+
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.6);
+}
+
+dialog p {
+  margin: 0 0 1em;
+}
+
+.choices {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6em;
 }

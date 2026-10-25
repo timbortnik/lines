@@ -8,10 +8,14 @@ export interface View {
   /** The 81 cells, row by row, matching the board's cell numbers. */
   cells: HTMLElement[];
   score: HTMLElement;
+  best: HTMLElement;
   preview: HTMLElement;
   over: HTMLElement;
   finalScore: HTMLElement;
+  newBest: HTMLElement;
   newGameButtons: HTMLElement[];
+  /** Asks before an unfinished game is replaced. */
+  confirm: HTMLDialogElement;
 }
 
 /** Finds the page's elements and fills the board with empty cells. */
@@ -21,27 +25,35 @@ export function createView(): View {
     cell.className = 'cell';
     return cell;
   });
-  byId('board').replaceChildren(...cells);
+  byId('board', HTMLElement).replaceChildren(...cells);
   return {
     cells,
-    score: byId('score'),
-    preview: byId('preview'),
-    over: byId('over'),
-    finalScore: byId('final-score'),
-    newGameButtons: [byId('new-game'), byId('play-again')],
+    score: byId('score', HTMLElement),
+    best: byId('best', HTMLElement),
+    preview: byId('preview', HTMLElement),
+    over: byId('over', HTMLElement),
+    finalScore: byId('final-score', HTMLElement),
+    newBest: byId('new-best', HTMLElement),
+    newGameButtons: [byId('new-game', HTMLElement), byId('play-again', HTMLElement)],
+    confirm: byId('confirm', HTMLDialogElement),
   };
 }
 
-/** Redraws everything from `game`: balls, next balls, score, preview and the game-over message. */
-export function render(view: View, game: Game): void {
+/**
+ * Redraws everything from `game`: balls, next balls, scores, preview and the game-over message.
+ * `best` is the best score of the games before this one.
+ */
+export function render(view: View, game: Game, best: number): void {
   view.cells.forEach((cell, index) => {
     const color = game.board[index];
     cell.replaceChildren(...(color === EMPTY ? [] : [ballElement(color)]));
   });
   for (const ball of game.next) view.cells[ball.cell].replaceChildren(ballElement(ball.color, true));
   showScore(view, game.score);
+  view.best.textContent = String(Math.max(best, game.score));
   showPreview(view, game.next);
   view.finalScore.textContent = String(game.score);
+  view.newBest.hidden = !(game.over && game.score > best);
   view.over.hidden = !game.over;
 }
 
@@ -60,8 +72,8 @@ export function showPreview(view: View, next: Ball[]): void {
   view.preview.replaceChildren(...next.map((ball) => ballElement(ball.color)));
 }
 
-function byId(id: string): HTMLElement {
+function byId<T extends HTMLElement>(id: string, type: new () => T): T {
   const element = document.getElementById(id);
-  if (element === null) throw new Error(`The page has no element with id "${id}"`);
+  if (!(element instanceof type)) throw new Error(`The page has no ${type.name} with id "${id}"`);
   return element;
 }

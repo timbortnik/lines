@@ -1,30 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { EMPTY } from '../../src/game/board.ts';
 import { move, newGame } from '../../src/game/game.ts';
 import type { Game } from '../../src/game/game.ts';
-import { findPath } from '../../src/game/path.ts';
-import { seeded } from './helpers.ts';
-
-/** The first legal move found, scanning origins and destinations in cell order. */
-function firstMove(game: Game): [number, number] {
-  for (let from = 0; from < game.board.length; from++) {
-    if (game.board[from] === EMPTY) continue;
-    for (let to = 0; to < game.board.length; to++) {
-      if (game.board[to] === EMPTY && findPath(game.board, from, to) !== null) return [from, to];
-    }
-  }
-  throw new Error('no legal move');
-}
-
-/** Plays `turns` first-found moves, with a fresh seed for each. */
-function playFrom(game: Game, turns: number, seed: number): Game {
-  for (let i = 0; i < turns && !game.over; i++) {
-    const [from, to] = firstMove(game);
-    game = move(game, from, to, seeded(seed + i))!.game;
-  }
-  return game;
-}
+import { firstMove, playFrom, seeded } from './helpers.ts';
 
 test('the same state, move and random numbers give identical results', () => {
   const game = newGame(seeded(5));

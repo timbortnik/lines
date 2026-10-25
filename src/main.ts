@@ -1,20 +1,34 @@
-// The page's entry point: holds the game, takes the player's taps and animates each turn.
+// The page's entry point: holds the game, takes the player's taps, animates each turn and saves the game.
 
 import { EMPTY } from './game/board.ts';
 import { move, newGame } from './game/game.ts';
 import { playTurn } from './ui/animate.ts';
+import { load, store } from './ui/storage.ts';
 import { createView, render } from './ui/view.ts';
 
 const view = createView();
-let game = newGame(Math.random);
+const saved = load();
+let game = saved?.game ?? newGame(Math.random);
+/** The highest score of the games that ended before this one. */
+let best = saved?.best ?? 0;
 /** The cell of the ball the player picked, if any. */
 let selected: number | null = null;
 /** True while a turn is animated; taps are ignored meanwhile. */
 let busy = false;
 
 view.cells.forEach((cell, index) => cell.addEventListener('click', () => void tap(index)));
-for (const button of view.newGameButtons) button.addEventListener('click', restart);
-render(view, game);
+for (const button of view.newGameButtons) button.addEventListener('click', requestNewGame);
+view.confirm.addEventListener('close', () => {
+  if (view.confirm.returnValue === 'new') startNewGame();
+});
+
+if (game.over) {
+  // A finished game isn't resumed.
+  startNewGame();
+} else {
+  store(game, best);
+  render(view, game, best);
+}
 
 async function tap(cell: number): Promise<void> {
   if (busy || game.over) return;
@@ -26,6 +40,8 @@ async function tap(cell: number): Promise<void> {
   const turn = move(game, selected, cell, Math.random);
   // No free path: the ball stays selected.
   if (turn === null) return;
+  // Saved before the animation, so closing the page mid-turn keeps the turn.
+  store(turn.game, best);
   select(null);
   busy = true;
   try {
@@ -33,17 +49,30 @@ async function tap(cell: number): Promise<void> {
   } finally {
     // Even if an animation fails, the screen ends up showing the actual game.
     game = turn.game;
-    render(view, game);
+    render(view, game, best);
     busy = false;
   }
 }
 
-/** Starts over at once; there is nothing saved to lose yet. */
-function restart(): void {
+/** Starts a new game, asking first while the current one isn't over. */
+function requestNewGame(): void {
   if (busy) return;
+  if (game.over) {
+    startNewGame();
+    return;
+  }
+  // Escape closes the dialog without setting a value, so clear the previous answer first.
+  view.confirm.returnValue = '';
+  view.confirm.showModal();
+}
+
+/** Ends the current game, counting its score towards the best, and starts a new one. */
+function startNewGame(): void {
+  best = Math.max(best, game.score);
   select(null);
   game = newGame(Math.random);
-  render(view, game);
+  store(game, best);
+  render(view, game, best);
 }
 
 function select(cell: number | null): void {
