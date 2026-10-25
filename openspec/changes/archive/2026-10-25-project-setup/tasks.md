@@ -72,13 +72,24 @@
     - headless Chrome shows "Coming soon" at https://timbortnik.github.io/lines/;
     - local `main` matched `origin/main`.
     - PR #2 was merged before tasks 3.2 and 3.3, so those were completed afterwards.
-- [ ] 4.5 Maintainer: in the repository, set Settings → Pages → Custom domain to `lines.bortnik.org` and save. Then, at the DNS provider, create the CNAME record `lines` → `timbortnik.github.io`. Verify: `dig +short lines.bortnik.org CNAME` prints `timbortnik.github.io.`, and GitHub's DNS check passes.
-- [ ] 4.6 Maintainer: tick **Enforce HTTPS** once it is offered (this can take up to 24 hours). Verify:
+- [x] 4.5 Maintainer: in the repository, set Settings → Pages → Custom domain to `lines.bortnik.org` and save. Then, at the DNS provider, create the CNAME record `lines` → `timbortnik.github.io`. Verify: `dig +short lines.bortnik.org CNAME` prints `timbortnik.github.io.`, and GitHub's DNS check passes.
+  - Done 2026-10-25:
+    - the CNAME resolves to `timbortnik.github.io.` on Google and Cloudflare. It was checked over DNS-over-HTTPS, because the maintainer's network intercepts plain DNS, so `dig` there is unreliable;
+    - GitHub showed "DNS check successful" after its cached "not found" answer expired.
+- [x] 4.6 Maintainer: tick **Enforce HTTPS** once it is offered (this can take up to 24 hours). Verify:
   - https://lines.bortnik.org shows "Coming soon";
   - http://lines.bortnik.org redirects to HTTPS.
-- [ ] 4.7 Check what is published. Verify:
+  - Done 2026-10-25:
+    - the Let's Encrypt certificate for `lines.bortnik.org` was issued about 12 minutes after the DNS check passed, valid until 2027-01-23;
+    - headless Chrome shows "Coming soon" at https://lines.bortnik.org/;
+    - http://lines.bortnik.org/ answers `301` → https://lines.bortnik.org/.
+- [x] 4.7 Check what is published. Verify:
   - https://lines.bortnik.org/src/main.ts and https://lines.bortnik.org/package.json return 404;
   - note whether https://timbortnik.github.io/lines/ now redirects to the custom domain (design: unverified).
+  - Done 2026-10-25:
+    - over HTTPS, `/src/main.ts` and `/package.json` return 404;
+    - over HTTP, eight repository files (sources, configs, tests, specs, the workflow) return 404, and `/`, `index.html`, `js/main.js` and `js/main.js.map` return 200;
+    - https://timbortnik.github.io/lines/ answers `301` → http://lines.bortnik.org/, which then redirects to HTTPS. This is noted in the README.
 
 ## Workflow follow-up
 
