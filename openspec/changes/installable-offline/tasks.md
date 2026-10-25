@@ -19,7 +19,8 @@
 
 ## 3. Documentation
 
-- [ ] 3.1 Update the README: installing and offline play in the intro, the two-step build, redrawing the icons, and that offline play needs HTTPS or localhost (with how to remove a localhost worker). Verify: the commands run as written.
+- [x] 3.1 Update the README: installing and offline play in the intro, the two-step build, redrawing the icons, and that offline play needs HTTPS or localhost (with how to remove a localhost worker). Verify: the commands run as written.
+  - Done 2026-10-25: intro, build, offline needs HTTPS or localhost (and how to unregister), guards and an Icons section; both icon commands reproduce the committed PNGs byte for byte, and `npx tsc -p src/sw` builds.
 
 ## 4. Review and archive
 
