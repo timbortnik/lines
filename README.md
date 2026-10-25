@@ -6,7 +6,7 @@ Work in progress: https://lines.bortnik.org shows a placeholder for now.
 
 ## Requirements
 
-Node.js 22 or newer. Builds that can't run TypeScript files directly, such as Ubuntu's `nodejs` package, work too.
+Node.js 22.8 or newer. Builds that can't run TypeScript files directly, such as Ubuntu's `nodejs` package, work too.
 
 ## Build and run locally
 
@@ -24,7 +24,9 @@ Then open http://localhost:8000.
 npm test
 ```
 
-This compiles `test/`, together with the `src/` modules the tests import, into `build/`, then runs the tests with Node's built-in test runner. Failures point at lines in the TypeScript sources. Two of the tests guard project rules: the site refers to its own files with relative URLs only, and the only dependencies are `typescript` and `@types/node`.
+This compiles `test/` and all of `src/game/` into `build/`, then runs the tests with Node's built-in test runner. Failures point at lines in the TypeScript sources.
+
+The game rules in `src/game/` must stay at 100% line, branch and function coverage. A guard test loads every module there, so an untested module can't hide, and it rejects `node:coverage` ignore comments. Other guard tests keep the site's own URLs relative and the dependencies limited to `typescript` and `@types/node`.
 
 ## Deploys
 

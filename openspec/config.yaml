@@ -20,7 +20,7 @@ context: |
     screen-reader support are out of scope.
   - TypeScript with `erasableSyntaxOnly`. `tsc` type-checks and compiles to ES modules
     that the browser loads directly.
-  - Node >= 22, any build, including distro builds that can't run .ts files.
+  - Node >= 22.8, any build, including distro builds that can't run .ts files.
     Tests are compiled by tsc and run with `node --enable-source-maps --test`.
     Never rely on Node executing .ts directly. CI tests on Node 22 and the current LTS.
   - Game rules live in a pure module with no DOM access, fully unit-tested.

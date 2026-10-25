@@ -7,5 +7,5 @@
     "rootDir": "..",
     "outDir": "../build"
   },
-  "include": ["."]
+  "include": [".", "../src/game"]
 }
