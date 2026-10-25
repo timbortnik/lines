@@ -30,19 +30,28 @@
 
 ## 3. Continuous integration and deployment workflow
 
-- [ ] 3.1 Add `.github/workflows/ci.yml` as in design §6:
+- [x] 3.1 Add `.github/workflows/ci.yml` as in design §6:
   - a `test` job on Node `22` and `lts/*`, with `NODE_OPTIONS=--no-experimental-strip-types`;
   - a `deploy` job that runs only on pushes to `main`, using `actions/checkout@v7`, `actions/setup-node@v7`, `actions/configure-pages@v6`, `actions/upload-pages-artifact@v5` and `actions/deploy-pages@v5`.
 
   Verify:
   - the `deploy` job declares `needs: test`;
   - pushing `project-setup` and opening its pull request runs checks named `test (22)` and `test (lts/*)`, both pass, and the deploy job is skipped.
-- [ ] 3.2 Maintainer: in the `main` ruleset, add `test (22)` and `test (lts/*)` as required status checks (design §8). Verify: `curl -s https://api.github.com/repos/timbortnik/lines/rules/branches/main` lists both under `required_status_checks`, along with `pull_request` (squash only), `non_fast_forward`, `deletion` and `required_linear_history`.
-- [ ] 3.3 Push a throwaway branch from `project-setup` with a deliberately failing test, and open a pull request from it. Verify:
+  - Done 2026-10-25: push run 40205027743 and pull-request run 40205075719 (PR #2) both passed `test (22)` and `test (lts/*)`, with `deploy` skipped.
+- [x] 3.2 Maintainer: in the `main` ruleset, add `test (22)` and `test (lts/*)` as required status checks (design §8). Verify: `curl -s https://api.github.com/repos/timbortnik/lines/rules/branches/main` lists both under `required_status_checks`, along with `pull_request` (squash only), `non_fast_forward`, `deletion` and `required_linear_history`.
+  - Done 2026-10-25: the rules API lists `test (22)` and `test (lts/*)` (not required to be up to date), `pull_request` (squash only, 0 approvals), `non_fast_forward`, `deletion` and `required_linear_history`.
+- [x] 3.3 Push a throwaway branch from `project-setup` with a deliberately failing test, and open a pull request from it. Verify:
   - the pull request's check is reported as failed;
   - GitHub shows merging as blocked.
 
   Then close the pull request and delete the branch.
+  - Done 2026-10-25, with the branch cut from `main` instead, because `project-setup` was already merged and `main` had the workflow.
+  - PR #3:
+    - `test (22)` failed, and `test (lts/*)` was cancelled by the matrix's default fail-fast;
+    - all four checks are shown as Required, and the maintainer saw "merging is blocked";
+    - no deploy ran;
+    - the branch was deleted, which closed the pull request unmerged.
+  - The anonymous API reported `mergeable_state: unstable`, so it doesn't reflect rulesets; the page is the reliable signal.
 - [x] 3.4 Add a "Deploys" section to `README.md` covering how changes land (pull request, required checks, squash merge), what triggers a deploy, and what is published where. Verify: it matches the workflow file and the ruleset.
 
 ## 4. Hosting at lines.bortnik.org (maintainer steps, in GitHub's documented order)
@@ -52,18 +61,35 @@
 - [x] 4.2 Maintainer: in the repository, set Settings → Pages → Build and deployment → Source to **GitHub Actions**. Verify: the setting shows "GitHub Actions".
   - Done 2026-10-25, as confirmed by the maintainer. The public API now reports `has_pages: true` (it was `false`). The source type itself is only visible with authentication; the first deploy in 4.4 exercises it.
 - [x] 4.3 Add a "Hosting setup (maintainers)" section to `README.md` listing steps 4.1, 4.2, 4.5 and 4.6. Verify: the order matches design §7.
-- [ ] 4.4 Squash-merge the `project-setup` pull request, then run `git switch main && git pull --ff-only`. Verify:
+- [x] 4.4 Squash-merge the `project-setup` pull request, then run `git switch main && git pull --ff-only`. Verify:
   - `main` gained exactly one commit;
   - the `deploy` job succeeds;
   - https://timbortnik.github.io/lines/ shows "Coming soon", which also proves the site works under a subpath;
   - local `main` matches `origin/main`.
-- [ ] 4.5 Maintainer: in the repository, set Settings → Pages → Custom domain to `lines.bortnik.org` and save. Then, at the DNS provider, create the CNAME record `lines` → `timbortnik.github.io`. Verify: `dig +short lines.bortnik.org CNAME` prints `timbortnik.github.io.`, and GitHub's DNS check passes.
-- [ ] 4.6 Maintainer: tick **Enforce HTTPS** once it is offered (this can take up to 24 hours). Verify:
+  - Done 2026-10-25:
+    - PR #2 was squash-merged as `3ab32bf`, the only new commit on `main`;
+    - deploy run 40205138505 succeeded;
+    - headless Chrome shows "Coming soon" at https://timbortnik.github.io/lines/;
+    - local `main` matched `origin/main`.
+    - PR #2 was merged before tasks 3.2 and 3.3, so those were completed afterwards.
+- [x] 4.5 Maintainer: in the repository, set Settings → Pages → Custom domain to `lines.bortnik.org` and save. Then, at the DNS provider, create the CNAME record `lines` → `timbortnik.github.io`. Verify: `dig +short lines.bortnik.org CNAME` prints `timbortnik.github.io.`, and GitHub's DNS check passes.
+  - Done 2026-10-25:
+    - the CNAME resolves to `timbortnik.github.io.` on Google and Cloudflare. It was checked over DNS-over-HTTPS, because the maintainer's network intercepts plain DNS, so `dig` there is unreliable;
+    - GitHub showed "DNS check successful" after its cached "not found" answer expired.
+- [x] 4.6 Maintainer: tick **Enforce HTTPS** once it is offered (this can take up to 24 hours). Verify:
   - https://lines.bortnik.org shows "Coming soon";
   - http://lines.bortnik.org redirects to HTTPS.
-- [ ] 4.7 Check what is published. Verify:
+  - Done 2026-10-25:
+    - the Let's Encrypt certificate for `lines.bortnik.org` was issued about 12 minutes after the DNS check passed, valid until 2027-01-23;
+    - headless Chrome shows "Coming soon" at https://lines.bortnik.org/;
+    - http://lines.bortnik.org/ answers `301` → https://lines.bortnik.org/.
+- [x] 4.7 Check what is published. Verify:
   - https://lines.bortnik.org/src/main.ts and https://lines.bortnik.org/package.json return 404;
   - note whether https://timbortnik.github.io/lines/ now redirects to the custom domain (design: unverified).
+  - Done 2026-10-25:
+    - over HTTPS, `/src/main.ts` and `/package.json` return 404;
+    - over HTTP, eight repository files (sources, configs, tests, specs, the workflow) return 404, and `/`, `index.html`, `js/main.js` and `js/main.js.map` return 200;
+    - https://timbortnik.github.io/lines/ answers `301` → http://lines.bortnik.org/, which then redirects to HTTPS. This is noted in the README.
 
 ## Workflow follow-up
 
