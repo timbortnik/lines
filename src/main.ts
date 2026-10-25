@@ -1,4 +1,4 @@
-// The page's entry point: holds the game, takes taps on the board and animates each turn.
+// The page's entry point: holds the game, takes the player's taps and animates each turn.
 
 import { EMPTY } from './game/board.ts';
 import { move, newGame } from './game/game.ts';
@@ -13,6 +13,7 @@ let selected: number | null = null;
 let busy = false;
 
 view.cells.forEach((cell, index) => cell.addEventListener('click', () => void tap(index)));
+for (const button of view.newGameButtons) button.addEventListener('click', restart);
 render(view, game);
 
 async function tap(cell: number): Promise<void> {
@@ -35,6 +36,14 @@ async function tap(cell: number): Promise<void> {
     render(view, game);
     busy = false;
   }
+}
+
+/** Starts over at once; there is nothing saved to lose yet. */
+function restart(): void {
+  if (busy) return;
+  select(null);
+  game = newGame(Math.random);
+  render(view, game);
 }
 
 function select(cell: number | null): void {

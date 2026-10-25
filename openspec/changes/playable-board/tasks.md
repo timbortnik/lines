@@ -6,7 +6,8 @@
   - Done 2026-10-25: tests and build pass; the guard fails on `url(/bg.png)`, `url( "/x.png" )` and an https `@import`; screenshots at 390×844, 1280×800, 844×390 and 320×568 fit without scrolling; the only console message is the browser's own `/favicon.ico` 404, left for installable-offline.
 - [x] 1.2 Add selection, moves and the turn animation: `src/ui/animate.ts`, and taps in `src/main.ts` (design §2, §4, §5, §6). Verify headlessly: tapping a ball selects it, a second tap drops it, an unreachable cell keeps it selected; after each of 20 moves the drawn board, score and preview match the game state; the same holds with reduced motion emulated; no console errors.
   - Done 2026-10-25: a scratchpad script replayed the page's random numbers through `move` and matched board, next balls, score, preview and selection after 40 turns on desktop and 34 (to game over) on a phone with reduced motion, covering moved, jumped, removed, appeared, chosen and over; `refilled` never occurred in play.
-- [ ] 1.3 Add the game-over message and both New game buttons (spec: Game over, New game). Verify headlessly, with reduced motion emulated: random moves until the game ends show the message with the final score, board taps then do nothing, and New game shows a fresh game with score 0.
+- [x] 1.3 Add the game-over message and both New game buttons (spec: Game over, New game). Verify headlessly, with reduced motion emulated: random moves until the game ends show the message with the final score, board taps then do nothing, and New game shows a fresh game with score 0.
+  - Done 2026-10-25: the first run caught the message drawn and tapped under the positioned cells (fixed with a z-index); then a game played to its end after 47 turns showed the message over the board with score 90, ignored board taps, and both New game buttons gave 5 balls, 3 next balls and score 0; taps on New game and a ball during a turn were ignored.
 
 ## 2. Documentation
 
