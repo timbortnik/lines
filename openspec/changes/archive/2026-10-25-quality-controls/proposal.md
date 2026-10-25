@@ -14,8 +14,8 @@
   - Secret Protection with push protection;
   - Dependabot alerts and security updates;
   - private vulnerability reporting.
-- **A `pre-review` skill** (`.claude/skills/pre-review/SKILL.md`): a single self-review pass over a branch before it is merged. Its checklist holds this project's recurring findings.
-- **A task rule** in `openspec/config.yaml`, so every implementation's task list ends by running the pre-review before merging.
+- **A `pre-review` skill** (`.claude/skills/pre-review/SKILL.md`): a single self-review pass over a local branch before it is first pushed. Its checklist holds this project's recurring findings.
+- **A task rule** in `openspec/config.yaml`, so every implementation's task list runs the pre-review before the branch's first push.
 
 ## Capabilities
 
@@ -44,4 +44,4 @@
 - **New files:** `SECURITY.md`, `.claude/skills/pre-review/SKILL.md`.
 - **Dependencies:** none added.
 - **Outside the repository:** the four security settings, already switched on by the maintainer.
-- **Later changes:** every implementation runs the pre-review before merging, and compiles under the stricter checks.
+- **Later changes:** every implementation runs the pre-review before its first push, and compiles under the stricter checks.
