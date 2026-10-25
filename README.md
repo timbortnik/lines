@@ -6,7 +6,7 @@ Work in progress: https://lines.bortnik.org shows a placeholder for now.
 
 ## Requirements
 
-Node.js 22 or newer. Builds that can't run TypeScript files directly, such as Ubuntu's `nodejs` package, work too.
+Node.js 22.8 or newer. Builds that can't run TypeScript files directly, such as Ubuntu's `nodejs` package, work too.
 
 ## Build and run locally
 

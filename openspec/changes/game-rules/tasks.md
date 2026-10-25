@@ -2,8 +2,8 @@
 
 ## 1. Coverage gate and Node 22.8
 
-- [ ] 1.1 Raise the minimum Node version to 22.8: `engines.node` in `package.json` and `package-lock.json`, the Node line in `openspec/config.yaml`'s context, and the README's "Requirements" section. Verify: all three say 22.8, and `npm ci` and `npm test` still pass on the maintainer's Node 22.22.1.
-- [ ] 1.2 Add `src/game/board.ts` (design §1) with its tests, the guard test `test/game/modules.test.ts`, `../src/game` in `test/tsconfig.json`'s `include`, and the coverage flags in the `test` script (design §6). Verify:
+- [x] 1.1 Raise the minimum Node version to 22.8: `engines.node` in `package.json` and `package-lock.json`, the Node line in `openspec/config.yaml`'s context, and the README's "Requirements" section. Verify: all three say 22.8, and `npm ci` and `npm test` still pass on the maintainer's Node 22.22.1.
+- [x] 1.2 Add `src/game/board.ts` (design §1) with its tests, the guard test `test/game/modules.test.ts`, `../src/game` in `test/tsconfig.json`'s `include`, and the coverage flags in the `test` script (design §6). Verify:
   - `npm test` passes, reporting 100% lines, branches and functions for `src/game`;
   - it fails when one board test is removed;
   - it fails when a function no test calls is added;
@@ -11,6 +11,14 @@
   - it fails when a `src/game` file contains a `node:coverage` comment.
 
   Revert each temporary edit afterwards.
+
+  - Done 2026-10-25:
+    - `npm test` passes with `board.ts` at 100% lines, branches and functions;
+    - removing the only test that calls `neighbours` fails with 56% line coverage;
+    - an uncalled function fails with 87.50% function coverage;
+    - untested modules in `src/game/` and in a subfolder fail with 92.86% line coverage;
+    - a `node:coverage` comment fails the guard test.
+    - Finding: Node's branch coverage counts code blocks, not true/false outcomes. Removing every assertion where `inside` returns false still passed at 100%, because its `&&` chain runs completely whenever it is true. The gate catches skipped if/else and ternary arms and uncalled functions, but outcomes are only proven by behaviour tests.
 
 ## 2. New game and next balls
 
