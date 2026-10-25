@@ -1,0 +1,53 @@
+schema: spec-driven
+
+# Project context (optional)
+# Add only constraints that should guide OpenSpec artifacts and workflows.
+# Include constraints an agent cannot infer by reading the code.
+# Keep general project documentation and discoverable codebase facts out.
+context: |
+  Open-source (MIT) browser version of Color Lines, also known as Lines98.
+  An installable PWA for mobile and desktop browsers that works offline after the first visit.
+  No backend: the site is static files. The current game is saved on the device and survives restarts.
+
+  Constraints:
+  - Least maintenance and least risk: zero runtime dependencies. The only dev dependencies
+    are `typescript` and `@types/node`. Adding any other package needs explicit approval.
+  - Browser platform APIs only: DOM elements as sprites, CSS for drawing, the Web Animations API
+    for motion, localStorage for saves, a hand-written service worker and manifest.
+    No UI frameworks, game engines, bundlers or PWA plugins.
+  - Use only web features that are Baseline "widely available".
+  - Input: mouse or touchpad on desktop, touch on mobile. Keyboard play and
+    screen-reader support are out of scope.
+  - TypeScript with `erasableSyntaxOnly`. `tsc` type-checks and compiles to ES modules
+    that the browser loads directly.
+  - Node >= 22, any build, including distro builds that can't run .ts files.
+    Tests are compiled by tsc and run with `node --enable-source-maps --test`.
+    Never rely on Node executing .ts directly. CI runs the current Node LTS.
+  - Game rules live in a pure module with no DOM access, fully unit-tested.
+    The UI only renders, animates and handles input.
+  - Hosted on GitHub Pages at https://lines.bortnik.org (custom domain; the address must never
+    change, since saved games and installs are tied to it), deployed by GitHub Actions
+    on push to main. All URLs must be
+    relative, so the site works both at a domain root and under a subpath.
+    CI tests on Node 22 and the current LTS.
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+rules:
+  proposal:
+    - State what is out of scope.
+  tasks:
+    - Every task leaves main deployable, with tests passing.
+    - Every change to the game rules module comes with unit tests.
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
