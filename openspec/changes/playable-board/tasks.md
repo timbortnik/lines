@@ -11,7 +11,8 @@
 
 ## 2. Documentation
 
-- [ ] 2.1 Update the README: the live site is playable, and "Build and run locally" gains `npx tsc -p . --watch` for editing. Verify: the commands run as written.
+- [x] 2.1 Update the README: the live site is playable, and "Build and run locally" gains `npx tsc -p . --watch` for editing. Verify: the commands run as written.
+  - Done 2026-10-25: the intro links the playable site, the watch command is documented (it recompiled `site/js/main.js` on save), and Testing says the UI is checked in a browser rather than unit-tested.
 
 ## 3. Review and archive
 
