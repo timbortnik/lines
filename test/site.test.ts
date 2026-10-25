@@ -33,10 +33,24 @@ function cssUrls(css: string): string[] {
   return [...strings, ...bare];
 }
 
+// In JSON, every string value at any depth, so fields added later are checked without teaching
+// this test about them; a string that merely looks like a URL fails too.
+function jsonStrings(text: string): string[] {
+  const strings: string[] = [];
+  JSON.parse(text, (_key, value) => {
+    if (typeof value === 'string') strings.push(value);
+    return value;
+  });
+  return strings;
+}
+
 // Each file type the site may contain, with how to find the URLs in it.
 const urlFinders: Record<string, (text: string) => string[]> = {
   '.html': htmlUrls,
   '.css': cssUrls,
+  '.webmanifest': jsonStrings,
+  // Images hold no URLs.
+  '.png': () => [],
 };
 
 test('the site has a home page', () => {

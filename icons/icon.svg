@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- The game's icon: a red ball on a board cell. Full-bleed, with the cell inside the central
+       circle that maskable icons keep, so one picture serves as both kinds. Redraw the PNGs with
+       the commands in the README after changing it. -->
+  <defs>
+    <radialGradient id="shine" cx="0.36" cy="0.3" r="0.3">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="shade" r="0.5">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#000" stop-opacity="0.45"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" fill="#2b2b2b"/>
+  <rect x="116" y="116" width="280" height="280" fill="#c4c4c4"/>
+  <polygon points="116,116 396,116 380,132 132,132 132,380 116,396" fill="#ececec"/>
+  <polygon points="396,116 396,396 116,396 132,380 380,380 380,132" fill="#7a7a7a"/>
+  <circle cx="256" cy="256" r="108" fill="#e53935"/>
+  <circle cx="256" cy="256" r="108" fill="url(#shade)"/>
+  <circle cx="256" cy="256" r="108" fill="url(#shine)"/>
+</svg>

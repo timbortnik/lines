@@ -2,7 +2,8 @@
 
 ## 1. Installable
 
-- [ ] 1.1 Draw `icons/icon.svg`, make `site/icons/icon-192.png` and `icon-512.png` from it with headless Chrome, add `site/manifest.webmanifest` and the manifest and icon links in `index.html` (design §6), and teach the URL guard `.webmanifest` and `.png` (design §7). Verify: `npm test` passes; the guard fails on an absolute icon `src` and on a root-relative `start_url`; headless Chrome reports no installability errors, parses the manifest with all three icons, and requests no `/favicon.ico`.
+- [x] 1.1 Draw `icons/icon.svg`, make `site/icons/icon-192.png` and `icon-512.png` from it with headless Chrome, add `site/manifest.webmanifest` and the manifest and icon links in `index.html` (design §6), and teach the URL guard `.webmanifest` and `.png` (design §7). Verify: `npm test` passes; the guard fails on an absolute icon `src` and on a root-relative `start_url`; headless Chrome reports no installability errors, parses the manifest with all three icons, and requests no `/favicon.ico`.
+  - Done 2026-10-25: Chrome reports no installability or manifest errors and no `/favicon.ico` request; the guard checks every JSON string (fail closed) and fails on an absolute icon, a root `start_url` and an unknown field holding `/play`; the bevel is drawn as mitered polygons.
 
 ## 2. Offline
 
