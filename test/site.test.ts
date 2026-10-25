@@ -4,15 +4,15 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 
 // Guards the "relative URLs only" rule for everything published from site/.
-// site/js/ is skipped because it is compiled from src/.
+// The compiled output is skipped: its URLs come from src/.
 
 const SITE = 'site';
-const COMPILED = join(SITE, 'js');
+const COMPILED = new Set(['js', 'sw.js', 'sw.js.map'].map((name) => join(SITE, name)));
 
 function siteFiles(dir = SITE): string[] {
   return readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const path = join(dir, entry.name);
-    if (path === COMPILED) return [];
+    if (COMPILED.has(path)) return [];
     return entry.isDirectory() ? siteFiles(path) : [path];
   });
 }
@@ -49,6 +49,7 @@ const urlFinders: Record<string, (text: string) => string[]> = {
   '.html': htmlUrls,
   '.css': cssUrls,
   '.webmanifest': jsonStrings,
+  '.json': jsonStrings,
   // Images hold no URLs.
   '.png': () => [],
 };

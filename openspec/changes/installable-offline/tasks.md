@@ -7,14 +7,15 @@
 
 ## 2. Offline
 
-- [ ] 2.1 Add the service worker build (design §2): `src/sw/tsconfig.json`, the root tsconfig's exclusion, the `build` script, `.gitignore`. Add `src/sw/sw.ts` (design §3), `site/offline-files.json` (design §4), and registration in `src/main.ts` (design §5). Add `test/offline.test.ts` for the file list and the no-imports rule, and teach the URL guard `.json` and to skip `sw.js` (design §7). Verify:
+- [x] 2.1 Add the service worker build (design §2): `src/sw/tsconfig.json`, the root tsconfig's exclusion, the `build` script, `.gitignore`. Add `src/sw/sw.ts` (design §3), `site/offline-files.json` (design §4), and registration in `src/main.ts` (design §5). Add `test/offline.test.ts` for the file list and the no-imports rule, and teach the URL guard `.json` and to skip `sw.js` (design §7). Verify:
   - `npm run build` emits `site/sw.js` without `export`;
   - the guards fail on a missing, an extra and an absolute list entry, and on an `import` in `sw.ts`;
   - headlessly against the Pages-like server (design §8):
     - after one visit, the game loads, resumes and saves with the server stopped;
-    - a file changed within the 10 minutes is served new on the next load;
+    - a file changed within the 10 minutes is served new on the next load, in the same tab and in a new browser;
     - with 5-second answers the page loads from the store in about 3 seconds;
     - over plain HTTP on a LAN address the game plays and the console notes offline play is unavailable.
+  - Done 2026-10-25: all checks pass, plus an offline load after a deploy and an interrupted store refresh; the guards fail 7 ways. Testing reshaped the worker (design §3): the page request alone picks server or store, the store refreshes only as a whole set, and responses are marked no-cache, after Chrome's in-memory cache served old files to same-tab reloads.
 
 ## 3. Documentation
 

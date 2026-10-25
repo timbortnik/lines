@@ -43,18 +43,33 @@ Verified with TypeScript 7.0.2 in the scratchpad:
 
 ### 3. What the worker does
 
-- **On install:** reads `offline-files.json` and stores every listed file in one cache, `lines`, with `cache: 'reload'` so it bypasses the browser's 10-minute cache. `cache.addAll` stores all or nothing, so a failed install leaves the old set intact and retries on a later load. Then it calls `skipWaiting()`, so a new worker takes over at the next load instead of after every tab closes. That's safe because both old and new workers fetch fresh files.
-- **On activate:** deletes stored entries no longer in the list.
-- **On fetch**, for same-origin GET requests:
-  1. It fetches from the network with `cache: 'no-cache'`, which always revalidates with the server, using the ETags.
-  2. A successful answer is stored and returned.
-  3. If the network fails, or doesn't answer within 3 seconds, the stored copy is returned (matching with `ignoreSearch`). The network request keeps running, kept alive by `event.waitUntil`, and updates the store when it answers.
-  4. With nothing stored, it waits for the network after all.
-- **Other origins and non-GET requests** pass through untouched. The game makes none today.
+**The rule:** a page load takes all its files from one place, either the server or the store, and the store always holds one complete deploy.
+
+- **The store** is one cache, `lines`. Only `storeAll()` writes it:
+  - it reads `offline-files.json` and `cache.addAll`s every listed file with `cache: 'no-cache'`, so each is checked against the server through its ETag;
+  - `addAll` stores all or nothing, so an interrupted refresh leaves the previous complete set;
+  - then it deletes entries no longer listed.
+- **On install:** `storeAll()`, then `skipWaiting()`. A new worker takes over at the next load instead of after every tab closes. That's safe because old and new workers both fetch fresh files.
+- **Page requests** (`mode: 'navigate'`):
+  - **The server answers within 3 seconds:** its answer is returned, `pageFromStore = false`, and `storeAll()` refreshes the store in the background (`event.waitUntil`), so the next offline load gets this deploy.
+  - **The server fails or is slower:** the stored page is returned, and `pageFromStore = true`. A late answer still triggers the refresh.
+  - **Nothing is stored yet:** it waits for the server after all.
+- **Other requests from the page:**
+  - when `pageFromStore` is set, from the store, with the server only for something not stored;
+  - otherwise from the server with `cache: 'no-cache'`, with no timeout, and the store only when the server fails.
+- **Every response the worker returns is marked `Cache-Control: no-cache`.** Measured in headless Chrome: without this, Chrome's in-memory cache reused the previous load's files for a reload in the same tab within the 10 minutes, without asking the worker. The page then mixed a new `index.html` with old scripts.
+- **Other origins and non-GET requests** pass through untouched. The game makes none.
+
+Why one place per load:
+- **Waits don't add up.** The modules load in about 4 waves, one import level each. With a timeout per file, a slow server would cost about 4 × 3 seconds; deciding once at the page costs 3 seconds in all (measured: 3.3 s with a 5-second server).
+- **Old and new files never mix.** Storing files one by one as they're fetched would leave the store half updated whenever a load is interrupted.
+
+`pageFromStore` is one value for the whole worker. Two tabs loading at the same moment could share it; the cost is at worst one load from the store while online.
 
 Alternatives considered:
 - Cache first with a version stamp: rejected by the maintainer, as it needs a build step and a guarded stamp.
 - Stale-while-revalidate: refreshes file by file without a version, so it can bring back the old-and-new mix.
+- Matching each file to its page through `FetchEvent.resultingClientId`: precise, but its support across browsers isn't confirmed.
 
 ### 4. The offline file list
 
@@ -128,13 +143,15 @@ Any other new file type still fails until it's taught.
 A throwaway scratchpad server mimics Pages: `max-age=600` and ETags, optional delays, and it can be stopped. Driving headless Chrome over the DevTools protocol, the check covers:
 - the installability errors (`Page.getInstallabilityErrors`) and the parsed manifest;
 - offline play after one visit, with the server stopped;
-- a simulated deploy within the 10 minutes;
+- a simulated deploy within the 10 minutes, both in the same tab and in a new browser process, with a control run that bypasses the worker and keeps the old files;
 - a server answering after 5 seconds;
+- plain HTTP on a LAN address;
 - no `/favicon.ico` request.
 
 ## Risks / Trade-offs
 
-- **On a slow network, some files could come from the server and others from the store.** If a deploy happened since the last visit, that is a mix → it needs both a slow network and a recent deploy, and a reload fixes it. On a uniformly slow connection all files time out alike.
-- **A service worker registered on `localhost:8000` stays for that address.** Another project served there later would pass through it → it only answers from its store when the network fails. The README mentions unregistering it in the browser's site settings.
-- **Every online load makes about a dozen revalidation requests** → each is a `304` with no body, over one connection.
-- **The first visit isn't controlled by the worker**, so its own files load the usual way → the install step downloads the whole list anyway.
+- **The first visit isn't controlled by the worker**, so its files load the usual way, and Chrome may reuse them from memory for 10 minutes in that tab → this only matters for a deploy within the first 10 minutes of someone's first visit. The install downloads the whole list anyway, so offline play is ready.
+- **A network failure halfway through an online load** answers the failed files from the store, which can be the previous deploy → it needs a dropped connection mid-load right after a deploy, and a reload fixes it.
+- **A service worker registered on `localhost:8000` stays for that address.** Another project served there later passes through it → it only answers from its store when the server fails. The README says how to remove it.
+- **Every online load makes about two dozen small requests:** the page's own revalidations plus the background store refresh. Each is a `304` with no body, over one connection.
+- **The worker rewrites response headers** → only `Cache-Control`, and only on what it hands the page; the stored copies keep the server's headers.
