@@ -39,6 +39,7 @@ rules:
   tasks:
     - Every task leaves main deployable, with tests passing.
     - Every change to the game rules module comes with unit tests.
+    - End with running the pre-review skill on the implementation branch before merging.
 
 # Per-operation guidance (optional)
 # Add advisory guidance for how apply and archive work should be conducted.
