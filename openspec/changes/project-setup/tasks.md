@@ -23,7 +23,8 @@
 - [x] 2.3 Check the test command's failure modes, reverting each temporary edit afterwards. Verify:
   - a failing assertion makes `npm test` exit non-zero, and its report points to the `test/*.test.ts` line;
   - a type error in a test exits non-zero before any test runs;
-  - a test importing a `src/` module that reads `document` fails with a type error.
+  - a test importing a `src/` module that reads `document` fails with a type error;
+  - a test file deleted from `test/` no longer runs on the next `npm test`.
 - [x] 2.4 Run `npm test` and `npm run build` on a Node 22 build without TypeScript support (the maintainer's Ubuntu Node 22.22.1). Verify: both succeed.
 - [x] 2.5 Add a "Testing" section to `README.md`. Verify: the documented command runs as written.
 

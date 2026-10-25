@@ -74,7 +74,9 @@ Alternatives considered:
 ### 3. npm scripts
 
 - `build`: `tsc -p .`
-- `test`: `tsc -p test && node --enable-source-maps --test "build/**/*.test.js"`
+- `test`: `node -e "fs.rmSync('build', { recursive: true, force: true })" && tsc -p test && node --enable-source-maps --test "build/**/*.test.js"`
+
+The first step empties `build/`, because `tsc` never deletes old output: a deleted or renamed test would otherwise keep running from its stale compiled copy. It's a one-liner rather than a dependency such as `rimraf`.
 
 The explicit glob works on Node 22, and keeps newer Node versions from picking up the `.ts` files on their own. It deliberately doesn't depend on where `rootDir` places the output: a pattern matching nothing would report a green run with no tests. Source maps make failures point to `.ts` lines; this was verified on Node 22.
 
