@@ -42,7 +42,7 @@
   - GitHub shows merging as blocked.
 
   Then close the pull request and delete the branch.
-- [ ] 3.4 Add a "Deploys" section to `README.md` covering how changes land (pull request, required checks, squash merge), what triggers a deploy, and what is published where. Verify: it matches the workflow file and the ruleset.
+- [x] 3.4 Add a "Deploys" section to `README.md` covering how changes land (pull request, required checks, squash merge), what triggers a deploy, and what is published where. Verify: it matches the workflow file and the ruleset.
 
 ## 4. Hosting at lines.bortnik.org (maintainer steps, in GitHub's documented order)
 
@@ -50,7 +50,7 @@
   - Done 2026-10-25. The TXT record `_github-pages-challenge-timbortnik.bortnik.org` resolves over DNS-over-HTTPS (Google and Cloudflare), and the maintainer confirmed that GitHub shows the domain as verified.
 - [x] 4.2 Maintainer: in the repository, set Settings → Pages → Build and deployment → Source to **GitHub Actions**. Verify: the setting shows "GitHub Actions".
   - Done 2026-10-25, as confirmed by the maintainer. The public API now reports `has_pages: true` (it was `false`). The source type itself is only visible with authentication; the first deploy in 4.4 exercises it.
-- [ ] 4.3 Add a "Hosting setup (maintainers)" section to `README.md` listing steps 4.1, 4.2, 4.5 and 4.6. Verify: the order matches design §7.
+- [x] 4.3 Add a "Hosting setup (maintainers)" section to `README.md` listing steps 4.1, 4.2, 4.5 and 4.6. Verify: the order matches design §7.
 - [ ] 4.4 Squash-merge the `project-setup` pull request, then run `git switch main && git pull --ff-only`. Verify:
   - `main` gained exactly one commit;
   - the `deploy` job succeeds;
