@@ -26,7 +26,7 @@ See proposal.md for the motivation. Facts checked while planning and in the pre-
 - Unused code and partial returns fail at compile time, with no new dependencies.
 - Every Node version's result is visible, including when another version fails.
 - Security reporting and scanning run on GitHub's own features, with `SECURITY.md` as the only file to maintain.
-- Every implementation branch gets the same pre-review before it is merged.
+- Every implementation branch gets the same pre-review before it is first pushed.
 
 **Non-Goals:**
 - Checks on the site at runtime, such as a Content Security Policy. Those belong with the game's own changes.
@@ -74,7 +74,7 @@ The maintainer switches on four repository settings, under Settings → Advanced
 
 ### 5. The `pre-review` skill
 
-`.claude/skills/pre-review/SKILL.md` describes one review pass over a branch before it is merged. It is written for this repository, with no text taken from other projects:
+`.claude/skills/pre-review/SKILL.md` describes one review pass over a local branch before it is first pushed. It is written for this repository, with no text taken from other projects:
 - It's best run by a fresh session that didn't write the code, which reports rather than edits.
 - The branch is compared with `origin/main`, including untracked files.
 - The changes are checked against the project context, the change's specs and the checklist.
@@ -97,8 +97,9 @@ There is no `.ai/` folder: the skill is the checklist's only reader.
 
 ### 6. The pre-review becomes a planning rule
 
-A new entry under `rules: tasks:` in `openspec/config.yaml`: *"End with running the pre-review skill on the implementation branch before merging."* OpenSpec feeds it into every generated task list, so the routine needs no separate reminder.
-- **Before merging, not before opening the pull request:** the review can then include what only exists once the pull request is open, such as its checks and the CodeQL run.
+A new entry under `rules: tasks:` in `openspec/config.yaml`: *"Run the pre-review skill on the implementation branch before its first push; only tasks that need the pull request come after it."* OpenSpec feeds it into every generated task list, so the routine needs no separate reminder.
+- **Before the first push:** the review covers exactly what goes up, and nothing can be merged before it reports.
+- **How this was decided:** the first version said "before merging". This change's own pull request (#6) was then merged before its pre-review finished, so the maintainer moved the review to before the push. Checks that only exist on GitHub, such as the pull request's checks and CodeQL, are verified after the push.
 
 Alternative considered: a `CLAUDE.md` instruction. It would be a second place to keep in sync with the planning rules.
 

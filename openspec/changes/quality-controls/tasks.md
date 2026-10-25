@@ -8,6 +8,11 @@
   - a parameter named `_event` compiles.
 
   Revert each temporary edit afterwards.
+  - Done 2026-10-25:
+    - build and tests pass;
+    - the probes fail with TS6133 (unused local and parameter), TS7030 (value on only some paths) and TS7029 (switch fall-through);
+    - `_event` compiles;
+    - the pre-review reproduced these, and showed that every probe passes without the four options.
 
 ## 2. CI: independent results
 
@@ -44,7 +49,11 @@
     - it contains no positional parameters.
 - [x] 4.2 Add the rule from design §6 under `rules: tasks:` in `openspec/config.yaml`. Verify: `openspec instructions tasks --change quality-controls --json` lists it among the rules.
   - Done 2026-10-25: `openspec instructions tasks` now lists the rule as the third task rule.
-- [ ] 4.3 Run the pre-review skill on this change's implementation branch, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded in the pull request description.
+- [x] 4.3 Run the pre-review skill on this change's implementation branch, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded in the pull request description.
+  - Done 2026-10-25:
+    - a fresh read-only session ran the new skill on the branch;
+    - PR #6 was merged while it ran, so its report and fixes are recorded in the follow-up pull request instead;
+    - the fixes: the skill's scope check now detects an already-merged branch, this record is completed, and the review timing moved to before the first push.
 
 ## Workflow follow-up
 

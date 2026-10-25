@@ -1,11 +1,11 @@
 ---
 name: pre-review
-description: Review a branch of this repository once before it is merged - check its changes against the project context, the change's specs and the checklist below, prove its new tests and guards can fail, and report findings with proposed fixes. Use when an implementation's task list reaches its pre-review task, or when asked to "pre-review" a branch.
+description: Review a branch of this repository once before it is first pushed - check its changes against the project context, the change's specs and the checklist below, prove its new tests and guards can fail, and report findings with proposed fixes. Use when an implementation's task list reaches its pre-review task, or when asked to "pre-review" a branch.
 ---
 
 # pre-review
 
-One review pass over a branch before it is merged. It catches what is cheap to catch before review; it does not replace review.
+One review pass over a local branch before it is first pushed. Then the review covers exactly what goes up, and nothing can be merged before it reports. Only checks that need GitHub, such as the pull request's checks, come after the push. It catches what is cheap to catch before review; it does not replace review.
 
 ## Who runs it
 
@@ -25,6 +25,8 @@ git status --short --untracked-files=all               # uncommitted and untrack
 ```
 
 Review the commits and anything uncommitted. If the commit list and the status are both empty, the scope check went wrong (for example, a stale `origin/main`). Stop and say so; don't report a clean branch.
+
+If commits are listed but `git diff --stat origin/main HEAD` (two dots) shows nothing, the branch has already been merged: a squash merge leaves its commits listed above. Stop and say so.
 
 ## 2. Check against the sources of truth
 
