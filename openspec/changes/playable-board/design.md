@@ -20,7 +20,7 @@
 
 ```
 site/index.html    the page skeleton: bar, board container, game-over message
-site/style.css     every visual: layout, cells, balls, colours, the selection bounce
+site/style.css     every visual: layout, cells, balls, colors, the selection bounce
 src/main.ts        entry point: game state, selection, taps, New game
 src/ui/view.ts     finds the page's elements, creates the 81 cells, draws a Game
 src/ui/animate.ts  plays a Turn's events with the Web Animations API
@@ -37,7 +37,7 @@ Alternative considered: patch the DOM event by event and never redraw. It saves 
 ### 3. Balls are elements that fill their cell
 
 - The board is a CSS grid of 81 cells with no gaps and no borders; the bevel is an inset `box-shadow`, which takes no space.
-- A ball is an element with `position: absolute; inset: 0` in its cell, so its box is exactly one cell. The sphere is its `::before` pseudo-element: layered radial gradients over the ball's colour, set per colour class `c1`–`c7`.
+- A ball is an element with `position: absolute; inset: 0` in its cell, so its box is exactly one cell. The sphere is its `::before` pseudo-element: layered radial gradients over the ball's color, set per color class `c1`–`c7`.
 - A next ball is the same element with the class `next`, which scales the sphere down.
 
 Because a ball's box is one cell, `translate(100%, 0)` moves it exactly one cell to the right at any board size. That lets the walk animation work in percentages, with no measuring and nothing to redo when the window is resized.

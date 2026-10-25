@@ -22,9 +22,19 @@ function htmlUrls(html: string): string[] {
   return [...html.matchAll(/\b(?:src|href)\s*=\s*(["'])(.*?)\1/gi)].map((match) => match[2]);
 }
 
+// In CSS outside comments, every quoted string and every unquoted url(...) value. Taking every
+// string also covers @import and image-set(); a string that merely looks like a URL fails too.
+function cssUrls(css: string): string[] {
+  const code = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const strings = [...code.matchAll(/(["'])(.*?)\1/g)].map((match) => match[2]);
+  const bare = [...code.matchAll(/\burl\(\s*([^"'\s)]+)\s*\)/gi)].map((match) => match[1]);
+  return [...strings, ...bare];
+}
+
 // Each file type the site may contain, with how to find the URLs in it.
 const urlFinders: Record<string, (text: string) => string[]> = {
   '.html': htmlUrls,
+  '.css': cssUrls,
 };
 
 test('the site has a home page', () => {

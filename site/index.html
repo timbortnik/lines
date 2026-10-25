@@ -4,9 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Lines</title>
+  <link rel="stylesheet" href="style.css">
   <script type="module" src="js/main.js"></script>
 </head>
 <body>
-  <p id="status">Loading…</p>
+  <main>
+    <header>
+      <span>Score <span id="score">0</span></span>
+      <span id="preview" class="preview"></span>
+      <button id="new-game" type="button">New game</button>
+    </header>
+    <div class="play">
+      <div id="board" class="board"></div>
+      <div id="over" class="over" hidden>
+        <p>Game over</p>
+        <p>Score <span id="final-score">0</span></p>
+        <button id="play-again" type="button">New game</button>
+      </div>
+    </div>
+  </main>
 </body>
 </html>

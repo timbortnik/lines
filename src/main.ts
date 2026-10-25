@@ -1,2 +1,9 @@
-// Placeholder until the game exists: shows that the compiled module loads at the published address.
-document.querySelector('#status')?.replaceChildren('Coming soon');
+// The page's entry point: starts a game and draws it.
+
+import { newGame } from './game/game.ts';
+import { createView, render } from './ui/view.ts';
+
+const view = createView();
+const game = newGame(Math.random);
+
+render(view, game);
