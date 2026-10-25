@@ -18,4 +18,5 @@
 
 - [x] 3.1 Run the pre-review skill once on the whole branch, in a fresh read-only subagent, and apply the fixes the maintainer agrees to. Verify: findings and fixes are recorded for the pull request description.
   - Done 2026-10-25: a fresh subagent checked about 16,000 game-written saves and 13 hostile ones and found 6 issues, all applied with the maintainer's approval: empty boards are rejected; three tests now prove their checks (4 mutations caught); design and spec wording fixed; the dialog keeps a 16px margin.
-- [ ] 3.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+- [x] 3.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+  - Done 2026-10-25: created the game-saving main spec (5 requirements) and replaced game-board's Game screen and New game requirements; `openspec validate --specs` passes for all 6 specs.
