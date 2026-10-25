@@ -32,9 +32,13 @@
 
 ## 4. Pre-review skill and planning rule
 
-- [ ] 4.1 Write `.claude/skills/pre-review/SKILL.md` (design §5) for this repository, with no text taken from other projects. Verify:
+- [x] 4.1 Write `.claude/skills/pre-review/SKILL.md` (design §5) for this repository, with no text taken from other projects. Verify:
   - Claude Code lists the skill;
   - every command in it runs as written in this repository.
+  - Done 2026-10-25:
+    - Claude Code listed `pre-review`, with the file's description, in the session that created it;
+    - its scope commands and DNS-over-HTTPS example ran as written;
+    - it contains no positional parameters.
 - [x] 4.2 Add the rule from design §6 under `rules: tasks:` in `openspec/config.yaml`. Verify: `openspec instructions tasks --change quality-controls --json` lists it among the rules.
   - Done 2026-10-25: `openspec instructions tasks` now lists the rule as the third task rule.
 - [ ] 4.3 Run the pre-review skill on this change's implementation branch, in a fresh read-only session. Apply the fixes the maintainer agrees to. Verify: the report and the applied fixes are recorded in the pull request description.
