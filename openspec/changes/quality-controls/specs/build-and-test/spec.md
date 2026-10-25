@@ -3,7 +3,7 @@
 ## ADDED Requirements
 
 ### Requirement: Unused code fails the build
-The build and test commands SHALL fail when code has an unused local variable or parameter, a code path that returns no value where one is required, or a switch case that falls through. A parameter whose name starts with an underscore SHALL count as deliberately unused.
+The build and test commands SHALL fail when code has an unused local variable or parameter, a function that returns a value on only some of its paths, or a switch case that falls through. A parameter whose name starts with an underscore SHALL count as deliberately unused.
 
 #### Scenario: Unused variable
 - **WHEN** a source or test file declares a local variable that is never read
@@ -17,20 +17,13 @@ The build and test commands SHALL fail when code has an unused local variable or
 - **WHEN** a parameter that is never read has a name starting with an underscore, such as `_event`
 - **THEN** it compiles
 
+#### Scenario: Value returned on only some paths
+- **WHEN** a function returns a value on some of its code paths and nothing on others
+- **THEN** the build or test command fails with a type error
+
 #### Scenario: Switch fall-through
 - **WHEN** a non-empty switch case falls through into the next one
 - **THEN** the build or test command fails with a type error
-
-### Requirement: Weekly scheduled testing
-The tests and the build SHALL also run once a week on the main branch without any push, so that breakage caused outside the repository, such as a new Node.js LTS, is reported while the repository is active. A scheduled run SHALL NOT publish the site.
-
-#### Scenario: A week without pushes
-- **WHEN** a week passes without a push to main
-- **THEN** the tests and the build run on main on both Node.js versions and report their result
-
-#### Scenario: Scheduled run passes
-- **WHEN** a scheduled run passes
-- **THEN** the published site is left unchanged
 
 ## MODIFIED Requirements
 

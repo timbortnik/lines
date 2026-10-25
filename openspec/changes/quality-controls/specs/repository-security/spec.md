@@ -14,7 +14,7 @@ Anyone SHALL be able to report a security vulnerability privately to the maintai
 - **THEN** it tells them to report vulnerabilities privately through GitHub rather than in public issues
 
 #### Scenario: Reporting a vulnerability
-- **WHEN** a visitor chooses "Report a vulnerability" on the repository's Security tab
+- **WHEN** a visitor chooses "Report a vulnerability" on the repository's "Security and quality" tab
 - **THEN** GitHub opens a private advisory form whose contents only the reporter and the maintainers can see
 
 ### Requirement: Code scanning
