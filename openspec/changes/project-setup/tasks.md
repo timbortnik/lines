@@ -40,11 +40,18 @@
   - Done 2026-10-25: push run 40205027743 and pull-request run 40205075719 (PR #2) both passed `test (22)` and `test (lts/*)`, with `deploy` skipped.
 - [x] 3.2 Maintainer: in the `main` ruleset, add `test (22)` and `test (lts/*)` as required status checks (design §8). Verify: `curl -s https://api.github.com/repos/timbortnik/lines/rules/branches/main` lists both under `required_status_checks`, along with `pull_request` (squash only), `non_fast_forward`, `deletion` and `required_linear_history`.
   - Done 2026-10-25: the rules API lists `test (22)` and `test (lts/*)` (not required to be up to date), `pull_request` (squash only, 0 approvals), `non_fast_forward`, `deletion` and `required_linear_history`.
-- [ ] 3.3 Push a throwaway branch from `project-setup` with a deliberately failing test, and open a pull request from it. Verify:
+- [x] 3.3 Push a throwaway branch from `project-setup` with a deliberately failing test, and open a pull request from it. Verify:
   - the pull request's check is reported as failed;
   - GitHub shows merging as blocked.
 
   Then close the pull request and delete the branch.
+  - Done 2026-10-25, with the branch cut from `main` instead, because `project-setup` was already merged and `main` had the workflow.
+  - PR #3:
+    - `test (22)` failed, and `test (lts/*)` was cancelled by the matrix's default fail-fast;
+    - all four checks are shown as Required, and the maintainer saw "merging is blocked";
+    - no deploy ran;
+    - the branch was deleted, which closed the pull request unmerged.
+  - The anonymous API reported `mergeable_state: unstable`, so it doesn't reflect rulesets; the page is the reliable signal.
 - [x] 3.4 Add a "Deploys" section to `README.md` covering how changes land (pull request, required checks, squash merge), what triggers a deploy, and what is published where. Verify: it matches the workflow file and the ruleset.
 
 ## 4. Hosting at lines.bortnik.org (maintainer steps, in GitHub's documented order)
