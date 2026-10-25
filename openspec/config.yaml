@@ -22,14 +22,14 @@ context: |
     that the browser loads directly.
   - Node >= 22, any build, including distro builds that can't run .ts files.
     Tests are compiled by tsc and run with `node --enable-source-maps --test`.
-    Never rely on Node executing .ts directly. CI runs the current Node LTS.
+    Never rely on Node executing .ts directly. CI tests on Node 22 and the current LTS.
   - Game rules live in a pure module with no DOM access, fully unit-tested.
     The UI only renders, animates and handles input.
   - Hosted on GitHub Pages at https://lines.bortnik.org (custom domain; the address must never
-    change, since saved games and installs are tied to it), deployed by GitHub Actions
-    on push to main. All URLs must be
-    relative, so the site works both at a domain root and under a subpath.
-    CI tests on Node 22 and the current LTS.
+    change, since saved games and installs are tied to it), deployed by GitHub Actions on push
+    to main. All URLs must be relative, so the site works both at a domain root and under a subpath.
+  - Every change lands as two pull requests: first the plan (OpenSpec files only), then the
+    implementation, which also archives the change if all its tasks are done before merging.
 
 # Per-artifact rules (optional)
 # Add custom rules for specific artifacts.

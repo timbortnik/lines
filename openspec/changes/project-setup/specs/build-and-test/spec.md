@@ -1,0 +1,74 @@
+# Spec Delta
+
+## Purpose
+
+Defines how contributors and CI build and test the project: which Node.js versions are supported, which commands exist, what makes them fail, and which dependencies the project may have.
+
+## ADDED Requirements
+
+### Requirement: Supported Node.js versions
+Building and testing SHALL work on Node.js 22 or newer, including Node.js builds that cannot execute TypeScript files directly.
+
+#### Scenario: Node.js 22 without TypeScript support
+- **WHEN** a contributor runs the test command on a Node.js 22 build that cannot execute TypeScript files
+- **THEN** the tests compile and run with the same results as on any other supported version
+
+#### Scenario: Current Node.js LTS
+- **WHEN** a contributor runs the build and test commands on the current Node.js LTS release
+- **THEN** both commands succeed
+
+### Requirement: Single test command
+The project SHALL provide one test command that compiles the tests together with the code they exercise and then runs them. It SHALL fail when any test fails or any compiled file has a type error.
+
+#### Scenario: All tests pass
+- **WHEN** a contributor runs the test command and every test passes
+- **THEN** the command exits with status 0
+
+#### Scenario: A test fails
+- **WHEN** a contributor runs the test command and a test fails
+- **THEN** the command exits with a non-zero status
+- **AND** the failure report points to the line in the TypeScript test source
+
+#### Scenario: Type error in tested code
+- **WHEN** a test or a module it imports has a type error
+- **THEN** the test command exits with a non-zero status without running any tests
+
+### Requirement: Single build command
+The project SHALL provide one build command that compiles the browser code into the folder that gets published, and fails on any type error.
+
+#### Scenario: Successful build
+- **WHEN** a contributor runs the build command on code without type errors
+- **THEN** the compiled ES modules appear in the published folder, next to the static files that load them
+
+#### Scenario: Type error in browser code
+- **WHEN** the browser code has a type error
+- **THEN** the build command exits with a non-zero status
+
+### Requirement: Tested modules are checked without the DOM library
+Every module the tests import SHALL be type-checked without the browser DOM library, so that references to `document`, `window` or DOM element types fail the test build.
+
+#### Scenario: A tested module uses the DOM
+- **WHEN** a module imported by a test refers to a DOM API such as `document`
+- **THEN** the test command fails with a type error
+
+### Requirement: Minimal dependencies
+The project SHALL have no runtime dependencies. Its development dependencies SHALL be exactly the TypeScript compiler and the Node.js type definitions. A change to that list SHALL require editing the test that guards it, so the change is explicit in review.
+
+#### Scenario: Only the allowed development dependencies
+- **WHEN** the test command runs on a project with no runtime dependencies and only the two allowed development dependencies
+- **THEN** the dependency check passes
+
+#### Scenario: A dependency is added
+- **WHEN** any other dependency, of any kind (runtime, optional, peer or development), is added to the package manifest
+- **THEN** the test command fails until the dependency guard is updated deliberately
+
+### Requirement: Continuous testing
+Every push and every pull request SHALL run the tests and the build on Node.js 22 and on the current Node.js LTS, and report the result on the commit or pull request.
+
+#### Scenario: Pull request with a failing test
+- **WHEN** a pull request contains a failing test on either Node.js version
+- **THEN** its check is reported as failed
+
+#### Scenario: Push with passing tests
+- **WHEN** a commit is pushed and the tests and build pass on both Node.js versions
+- **THEN** its check is reported as passed
