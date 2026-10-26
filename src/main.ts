@@ -2,6 +2,7 @@
 
 import { EMPTY } from './game/board.ts';
 import { move, newGame } from './game/game.ts';
+import { NEW_GAME_HISTORY, RESUMED_HISTORY, afterMove, undo } from './game/undo.ts';
 import { playTurn } from './ui/animate.ts';
 import { load, store } from './ui/storage.ts';
 import { createView, render } from './ui/view.ts';
@@ -9,6 +10,8 @@ import { createView, render } from './ui/view.ts';
 const view = createView();
 const saved = load();
 let game = saved?.game ?? newGame(Math.random);
+/** What Undo can bring back. */
+let history = saved === null ? NEW_GAME_HISTORY : RESUMED_HISTORY;
 /** The highest score of the games that ended before this one. */
 let best = saved?.best ?? 0;
 /** The cell of the ball the player picked, if any. */
@@ -17,6 +20,7 @@ let selected: number | null = null;
 let busy = false;
 
 view.cells.forEach((cell, index) => cell.addEventListener('click', () => void tap(index)));
+view.undo.addEventListener('click', undoMove);
 for (const button of view.newGameButtons) button.addEventListener('click', requestNewGame);
 view.confirm.addEventListener('close', () => {
   if (view.confirm.returnValue === 'new') startNewGame();
@@ -27,7 +31,7 @@ if (game.over) {
   startNewGame();
 } else {
   store(game, best);
-  render(view, game, best);
+  redraw();
 }
 
 // Offline play, and newer files on every online load: see src/sw/sw.ts.
@@ -55,10 +59,24 @@ async function tap(cell: number): Promise<void> {
     await playTurn(view, turn, game.score);
   } finally {
     // Even if an animation fails, the screen ends up showing the actual game.
+    history = afterMove(history, game);
     game = turn.game;
-    render(view, game, best);
+    redraw();
     busy = false;
   }
+}
+
+/** Takes back the last move, at once and without animation. */
+function undoMove(): void {
+  if (busy) return;
+  const undone = undo(history);
+  // The button is disabled when there is nothing to undo, so this is only a type guard.
+  if (undone === null) return;
+  game = undone.game;
+  history = undone.history;
+  select(null);
+  store(game, best);
+  redraw();
 }
 
 /** Starts a new game, asking first while the current one isn't over. */
@@ -78,8 +96,14 @@ function startNewGame(): void {
   best = Math.max(best, game.score);
   select(null);
   game = newGame(Math.random);
+  history = NEW_GAME_HISTORY;
   store(game, best);
-  render(view, game, best);
+  redraw();
+}
+
+/** Draws the game, with Undo enabled when there is a move to take back. */
+function redraw(): void {
+  render(view, game, best, history.previous !== null);
 }
 
 function select(cell: number | null): void {

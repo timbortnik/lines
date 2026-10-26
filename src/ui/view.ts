@@ -13,6 +13,8 @@ export interface View {
   over: HTMLElement;
   finalScore: HTMLElement;
   newBest: HTMLElement;
+  /** Takes back the last move. Disabled when there is nothing to undo. */
+  undo: HTMLButtonElement;
   newGameButtons: HTMLElement[];
   /** Asks before an unfinished game is replaced. */
   confirm: HTMLDialogElement;
@@ -34,16 +36,17 @@ export function createView(): View {
     over: byId('over', HTMLElement),
     finalScore: byId('final-score', HTMLElement),
     newBest: byId('new-best', HTMLElement),
+    undo: byId('undo', HTMLButtonElement),
     newGameButtons: [byId('new-game', HTMLElement), byId('play-again', HTMLElement)],
     confirm: byId('confirm', HTMLDialogElement),
   };
 }
 
 /**
- * Redraws everything from `game`: balls, next balls, scores, preview and the game-over message.
- * `best` is the best score of the games before this one.
+ * Redraws everything from `game`: balls, next balls, scores, preview, the Undo button and the game-over message.
+ * `best` is the best score of the games before this one. `canUndo` enables the Undo button.
  */
-export function render(view: View, game: Game, best: number): void {
+export function render(view: View, game: Game, best: number, canUndo: boolean): void {
   view.cells.forEach((cell, index) => {
     const color = game.board[index];
     cell.replaceChildren(...(color === EMPTY ? [] : [ballElement(color)]));
@@ -55,6 +58,7 @@ export function render(view: View, game: Game, best: number): void {
   view.finalScore.textContent = String(game.score);
   view.newBest.hidden = !(game.over && game.score > best);
   view.over.hidden = !game.over;
+  view.undo.disabled = !canUndo;
 }
 
 /** A ball of `color`, full size or small for a next ball. */
