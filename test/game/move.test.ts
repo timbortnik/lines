@@ -51,6 +51,7 @@ test('a next ball the moving ball lands on jumps to the cell the ball left and k
   ]);
   assert.equal(turn.game.board[cellAt(8, 8)], 3, 'it then appears there');
   assert.equal(turn.game.board[cellAt(8, 7)], 1);
+  assert.equal(turn.game.next[0].cell, cellAt(0, 2), 'the first draw, 0, chose the next balls');
 });
 
 test('a completed line of five is removed, scores 10, and gives a free move', () => {

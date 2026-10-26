@@ -7,7 +7,7 @@ When a ball lands on a next ball, that next ball jumps to a random free cell, wh
 ## What Changes
 
 - **Landing on a next ball swaps them:** the next ball moves to the cell the moving ball left and keeps its color. No random choice is made on landing.
-- **Unchanged:** 3 balls still arrive per turn, game over still comes when the board fills, the turn record still reports the jump, and the board still animates it as before, now at the vacated cell.
+- **Unchanged:** no next ball is lost, game over still comes when the board fills, the turn record still reports the jump, and the board still animates it as before, now at the vacated cell.
 
 ## Capabilities
 
@@ -17,7 +17,7 @@ None.
 
 ### Modified Capabilities
 
-- `game-rules`: "Landing on a next ball" sends the covered next ball to the cell the moving ball left, not to a random free cell.
+- `game-rules`: "Landing on a next ball" sends the covered next ball to the cell the moving ball left, not to a random free cell. "Next balls" says their cells are random when chosen.
 
 ## Out of Scope
 
