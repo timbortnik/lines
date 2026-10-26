@@ -38,18 +38,18 @@ test('a route may cross a cell holding a next ball', () => {
   assert.ok(moved.type === 'moved' && moved.path.includes(cellAt(4, 4)));
 });
 
-test('a next ball the moving ball lands on jumps to a free cell and keeps its color', () => {
+test('a next ball the moving ball lands on jumps to the cell the ball left and keeps its color', () => {
   const board = boardOf(['', '', '', '', '', '', '', '', '........1']);
   const next = [{ cell: cellAt(8, 7), color: 3 }, ...NEXT.slice(0, 2)];
-  // A first draw of 0 takes the lowest free cell: (0, 2), because (0, 0) and (0, 1) hold the other next balls.
+  // A random jump with a first draw of 0 would take the lowest free cell, (0, 2), not the cell the ball left.
   const turn = play(gameOf(board, next), cellAt(8, 8), cellAt(8, 7), sequence([0], seeded(1)));
   assert.deepEqual(turn.events, [
     { type: 'moved', path: [cellAt(8, 8), cellAt(8, 7)] },
-    { type: 'jumped', from: cellAt(8, 7), to: cellAt(0, 2), color: 3 },
-    { type: 'appeared', balls: [{ cell: cellAt(0, 2), color: 3 }, ...NEXT.slice(0, 2)] },
+    { type: 'jumped', from: cellAt(8, 7), to: cellAt(8, 8), color: 3 },
+    { type: 'appeared', balls: [{ cell: cellAt(8, 8), color: 3 }, ...NEXT.slice(0, 2)] },
     { type: 'chosen', balls: turn.game.next },
   ]);
-  assert.equal(turn.game.board[cellAt(0, 2)], 3, 'it then appears there');
+  assert.equal(turn.game.board[cellAt(8, 8)], 3, 'it then appears there');
   assert.equal(turn.game.board[cellAt(8, 7)], 1);
 });
 

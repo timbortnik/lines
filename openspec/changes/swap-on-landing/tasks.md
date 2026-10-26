@@ -2,7 +2,8 @@
 
 ## 1. Swap on landing
 
-- [ ] 1.1 In `src/game/game.ts`, send a next ball the moving ball lands on to the cell the ball left, keeping its color and its `jumped` event, with no random draw. Update `test/game/move.test.ts`: the landing test uses a random source whose first draw would pick a different free cell, and asserts the whole turn record. Verify: `npm test` passes at 100% coverage, and putting back the random jump makes the landing test fail.
+- [x] 1.1 In `src/game/game.ts`, send a next ball the moving ball lands on to the cell the ball left, keeping its color and its `jumped` event, with no random draw. Update `test/game/move.test.ts`: the landing test uses a random source whose first draw would pick a different free cell, and asserts the whole turn record. Verify: `npm test` passes at 100% coverage, and putting back the random jump makes the landing test fail.
+  - Done 2026-10-26: `jumpCovered` became `swapCovered`; 79 tests pass at 100% coverage; with the old `game.ts` restored, only the landing test fails.
 
 ## 2. Review and archive
 

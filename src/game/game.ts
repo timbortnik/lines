@@ -64,7 +64,7 @@ export function move(game: Game, from: number, to: number, random: Random): Turn
   const events: TurnEvent[] = [{ type: 'moved', path }];
   board[to] = board[from];
   board[from] = EMPTY;
-  const next = jumpCovered(board, game.next, to, random, events);
+  const next = swapCovered(game.next, from, to, events);
 
   const lined = findLines(board, [to]);
   if (lined.length > 0) {
@@ -88,13 +88,12 @@ export function move(game: Game, from: number, to: number, random: Random): Turn
   return { game: { board, next: chosen, score, over }, events };
 }
 
-/** A next ball the moving ball landed on jumps to a free cell. One exists: the ball just left its cell. */
-function jumpCovered(board: number[], next: Ball[], landing: number, random: Random, events: TurnEvent[]): Ball[] {
-  const covered = next.find((ball) => ball.cell === landing);
+/** A next ball on `to`, where the moving ball landed, jumps to `from`, the cell the ball left: the two swap places. */
+function swapCovered(next: Ball[], from: number, to: number, events: TurnEvent[]): Ball[] {
+  const covered = next.find((ball) => ball.cell === to);
   if (covered === undefined) return next;
-  const [cell] = freeCells(board, next.filter((ball) => ball !== covered), 1, random);
-  events.push({ type: 'jumped', from: landing, to: cell, color: covered.color });
-  return next.map((ball) => (ball === covered ? { cell, color: ball.color } : ball));
+  events.push({ type: 'jumped', from: to, to: from, color: covered.color });
+  return next.map((ball) => (ball === covered ? { cell: from, color: ball.color } : ball));
 }
 
 function remove(board: number[], cells: number[], events: TurnEvent[]): number {
