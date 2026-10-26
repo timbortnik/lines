@@ -2,12 +2,12 @@
 
 ## Purpose
 
-Defines what the player sees and does in the browser: the game screen, selecting and moving balls, how turns are animated, game over and new game, and the layout on phones and desktops.
+Defines what the player sees and does in the browser: the game screen, selecting and moving balls, how turns are animated, undoing a move, game over and new game, and the layout on phones and desktops.
 
 ## Requirements
 
 ### Requirement: Game screen
-The page SHALL show a bar with the score, the best score, a preview of the next balls' colors and a New game button, and below it the 9×9 board. Every ball SHALL appear on its cell in its color, and every next ball SHALL appear small on its cell. Opening the page SHALL resume the saved game, or start a new game when there is none to resume.
+The page SHALL show a bar with the score, the best score, a preview of the next balls' colors, an Undo button and a New button, and below it the 9×9 board. Every ball SHALL appear on its cell in its color, and every next ball SHALL appear small on its cell. Opening the page SHALL resume the saved game, or start a new game when there is none to resume.
 
 #### Scenario: Page opened
 - **WHEN** a player opens the game for the first time on a device
@@ -55,7 +55,7 @@ A move SHALL be animated in the order the turn happened: the ball walks along it
 - **THEN** the ball walks to its cell, the next balls grow to full size, and new next balls appear small on the board and in the preview
 
 #### Scenario: Tap during a turn
-- **WHEN** the player taps the board or the New game button while a turn is animated
+- **WHEN** the player taps the board, the Undo button or the New button while a turn is animated
 - **THEN** the tap is ignored
 
 ### Requirement: Reduced motion
@@ -73,10 +73,10 @@ When a turn ends the game, the page SHALL show that the game is over, with the f
 - **THEN** a game-over message with the final score and a New game button is shown over the board
 
 ### Requirement: New game
-During an unfinished game, the New game button in the bar SHALL ask for confirmation in a dialog with a Keep playing and a New game button. After game over, the New game buttons SHALL start a new game at once. Starting a new game SHALL drop any selection.
+During an unfinished game, the New button in the bar SHALL ask for confirmation in a dialog with a Keep playing and a New game button. After game over, the New button and the New game button in the game-over message SHALL start a new game at once. Starting a new game SHALL drop any selection.
 
 #### Scenario: New game during play
-- **WHEN** the player presses New game during an unfinished game
+- **WHEN** the player presses New in the bar during an unfinished game
 - **THEN** a dialog asks whether to start a new game, and the board can't be played until it closes
 
 #### Scenario: New game confirmed
@@ -105,3 +105,33 @@ The board SHALL be square and as large as the screen allows below the bar, in po
 #### Scenario: Quick taps on a phone
 - **WHEN** the player taps two cells in quick succession on a touch screen
 - **THEN** both taps reach the game and the page does not zoom
+
+### Requirement: Undo
+The Undo button in the bar SHALL take back the last move: the board, the next balls, the score and the best score SHALL return to what they were before it, at once and without animation, and any selection SHALL be dropped. Undo SHALL also take back a move that ended the game.
+
+#### Scenario: Move undone
+- **WHEN** the player presses Undo after a move, with a ball selected
+- **THEN** the board, the next balls on the board and in the preview, and the score are as they were before the move, and no ball is selected
+
+#### Scenario: Game over undone
+- **WHEN** the player presses Undo after the move that ended the game
+- **THEN** the game-over message closes, the game is as it was before that move, and it can be played on
+
+### Requirement: When Undo is available
+Undo SHALL be available only for the last move, and not for a move played right after an undo, so that each draw of new next balls gets at most one retry. A new game SHALL have nothing to undo. A game resumed when the page opens SHALL be treated as just undone, since its save may have been written by an undo. When Undo isn't available, its button SHALL be shown disabled and SHALL do nothing.
+
+#### Scenario: New game
+- **WHEN** a new game starts
+- **THEN** the Undo button is disabled until the first move
+
+#### Scenario: After an undo
+- **WHEN** the player has just undone a move
+- **THEN** the Undo button is disabled
+
+#### Scenario: Move right after an undo
+- **WHEN** the player undoes a move, plays a move, then plays another
+- **THEN** the Undo button stays disabled after the first of those moves, and is enabled after the second
+
+#### Scenario: Game resumed
+- **WHEN** the page opens on a saved game, and the player plays a move, then another
+- **THEN** the Undo button stays disabled until the second move

@@ -10,6 +10,7 @@
   "js/game/lines.js",
   "js/game/path.js",
   "js/game/save.js",
+  "js/game/undo.js",
   "js/ui/animate.js",
   "js/ui/storage.js",
   "js/ui/view.js"
