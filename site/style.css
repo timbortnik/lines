@@ -35,7 +35,8 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gutter);
+  /* Narrower than the gutter, for the same reason as the bar's button padding below. */
+  gap: 8px;
   justify-self: stretch;
   height: var(--bar);
   font-size: min(18px, 4.5dvw);
@@ -50,6 +51,17 @@ button {
   color: #222;
   font: inherit;
   cursor: pointer;
+}
+
+/* Narrower than other buttons, so the bar fits a 320px-wide screen with 5-digit scores. */
+header button {
+  padding-inline: 0.5em;
+}
+
+/* Undo, when there is nothing to undo. */
+button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .scores {

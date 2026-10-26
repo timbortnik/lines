@@ -48,12 +48,12 @@ Pressing Undo drops the selection, sets the game and history from `undo`, saves 
 
 ### 5. The bar: "New" and an 8px gap
 
-The bar's button reads "New". The game-over message keeps "New game", and so does the dialog. The bar's gap shrinks from 16px to 8px. Measured at a 320px width, the bar's items then take 276 of the 288px available. A disabled button is drawn at reduced opacity, with the default cursor.
+The bar's button reads "New". The game-over message keeps "New game", and so does the dialog. The bar's gap shrinks from 16px to 8px, and the bar's buttons get 0.5em of side padding instead of 0.9em. Measured with 5-digit scores, the bar's items then take 286 of the 288px available at a 320px width, and 317 of 328px at 360px. A side padding of 0.6em still overflows at 320px. A disabled button is drawn at reduced opacity, with the default cursor.
 
 *Alternatives:* icon buttons need a glyph every platform draws, or inline SVG, and are less clear than words. A second row of buttons would take height from the board on landscape screens.
 
 ## Risks / Trade-offs
 
-- [Long scores could overflow the bar on the narrowest screens] → Verify the bar at 320px with 5-digit scores and best scores. If it doesn't fit, narrow the button padding too.
+- [Long scores could overflow the bar on the narrowest screens] → Measured at 320px with 5-digit scores and best scores (decision 5). The margin there is 2px, and fonts differ between systems, so a 320px-wide phone with a wider font than the test machine could still overflow. 360px leaves 11px.
 - [A reload loses Undo] → Accepted and specified. Keeping it would need a new save format, plus code to keep loading saves of the current one.
 - [Move, undo, reload, move would get around the rule, since the save doesn't record the undo] → A resumed game's first move can't be undone (decision 1), so a reload buys no retry. The cost: an honest mis-tap on the first move after the page opens can't be taken back. Recording the undo in the save would avoid that, but needs a new save format.
