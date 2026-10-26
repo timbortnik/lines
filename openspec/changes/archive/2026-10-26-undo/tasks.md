@@ -16,4 +16,5 @@
 
 - [x] 3.1 Run the pre-review skill once on the whole branch, in a fresh read-only subagent, and apply the fixes the maintainer agrees to. Verify: findings and fixes are recorded for the pull request description.
   - Done 2026-10-26: no code defects; 8 mutations and 2 guard breaks all red, 7,825 fuzzed moves left their input unchanged, all browser checks passed; 4 wording findings applied with approval (why a game-over undo keeps the best score, Undo restoring the best score, a design sentence, the changed-file list).
-- [ ] 3.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+- [x] 3.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+  - Done 2026-10-26: replaced game-board's Game screen, Animated turns and New game, added Undo and When Undo is available, and replaced game-saving's Game saved on the device; `openspec validate --specs` passes for all 7 specs, and no change is active.
