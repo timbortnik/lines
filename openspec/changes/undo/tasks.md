@@ -2,7 +2,8 @@
 
 ## 1. The undo rule
 
-- [ ] 1.1 Add `src/game/undo.ts` (design §1) with tests in `test/game/undo.test.ts`: a new game has nothing to undo; after a move, undo gives back the game before it; after an undo there is nothing to undo; a move right after an undo can't be undone, and the move after it can; a resumed game's first move can't be undone, and its second can. Verify: `npm test` passes at 100% coverage, and dropping the `undone` check from `afterMove`, or starting a resumed game with `undone` false, makes a test fail.
+- [x] 1.1 Add `src/game/undo.ts` (design §1) with tests in `test/game/undo.test.ts`: a new game has nothing to undo; after a move, undo gives back the game before it; after an undo there is nothing to undo; a move right after an undo can't be undone, and the move after it can; a resumed game's first move can't be undone, and its second can. Verify: `npm test` passes at 100% coverage, and dropping the `undone` check from `afterMove`, or starting a resumed game with `undone` false, makes a test fail.
+  - Done 2026-10-26: 84 tests pass at 100% coverage; 6 mutations of `undo.ts` (both named here, plus undo keeping `previous` or not setting `undone`, `afterMove` keeping `undone`, a new game starting `undone`) each fail a test; the offline file list gained `js/game/undo.js`.
 
 ## 2. The Undo button
 
