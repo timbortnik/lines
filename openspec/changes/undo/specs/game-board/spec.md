@@ -46,7 +46,7 @@ During an unfinished game, the New button in the bar SHALL ask for confirmation 
 ## ADDED Requirements
 
 ### Requirement: Undo
-The Undo button in the bar SHALL take back the last move: the board, the next balls and the score SHALL return to what they were before it, at once and without animation, and any selection SHALL be dropped. Undo SHALL also take back a move that ended the game.
+The Undo button in the bar SHALL take back the last move: the board, the next balls, the score and the best score SHALL return to what they were before it, at once and without animation, and any selection SHALL be dropped. Undo SHALL also take back a move that ended the game.
 
 #### Scenario: Move undone
 - **WHEN** the player presses Undo after a move, with a ball selected

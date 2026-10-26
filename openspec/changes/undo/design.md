@@ -42,7 +42,7 @@ Pressing Undo drops the selection, sets the game and history from `undo`, saves 
 
 ### 4. `render` sets the Undo button
 
-`render(view, game, best, canUndo)` also sets the button's `disabled`. `main.ts` passes `history.previous !== null`. A disabled button fires no click, so it can't act during the moments the flag is stale. The existing `busy` check covers the animation, when the button still shows its state from before the move.
+`render(view, game, best, canUndo)` also sets the button's `disabled`. `main.ts` passes `history.previous !== null`. During a turn's animation the button still shows its state from before the move; the existing `busy` check ignores it then.
 
 *Alternative:* `main.ts` sets `disabled` itself after each `render`. That would put a second drawing step at each of the four places the page is redrawn.
 

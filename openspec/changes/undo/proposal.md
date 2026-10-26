@@ -6,10 +6,10 @@ A mis-tap can't be taken back. On a phone it is easy to tap the wrong cell, and 
 
 ## What Changes
 
-- **An Undo button in the bar** takes back the last move: the board, next balls and score return to what they were before it. It is greyed out when there is nothing to undo.
+- **An Undo button in the bar** takes back the last move: the board, next balls, score and best score return to what they were before it. It is greyed out when there is nothing to undo.
 - **One step only.** After an undo there is nothing more to undo until the next move.
 - **A move played right after an undo can't be undone.** Each move draws new next balls at random, so undoing and replaying could redraw them again and again. With this rule each draw gets at most one retry.
-- **Undo works after game over** and takes back the move that ended the game. The best score is unaffected, since a game only counts towards it when it is replaced.
+- **Undo works after game over** and takes back the move that ended the game. That move never scores, so the score and best score stay as they are.
 - **New game clears it**, so Undo can't bring back an abandoned game without the confirmation.
 - **Undo is instant:** the board is redrawn without animation, and any selection is dropped. Like New game, it is ignored while a turn is animated.
 - **The game is saved after an undo**, so a reload resumes the game as it was before the undone move. What Undo could bring back isn't saved: after the page is opened there is nothing to undo.
@@ -37,5 +37,5 @@ None.
 ## Impact
 
 - **New code:** `src/game/undo.ts`, which holds the rule of what Undo can bring back, with tests under the coverage gate.
-- **Changed files:** `src/main.ts`, `src/ui/view.ts`, `site/index.html`, `site/style.css`.
+- **Changed files:** `src/main.ts`, `src/ui/view.ts`, `site/index.html`, `site/style.css`, `site/offline-files.json`.
 - **Unchanged:** the rules of a move, the save format, and the dependencies.
