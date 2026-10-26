@@ -21,7 +21,7 @@ A new game SHALL start with a score of 0 and 5 balls of random colors on random 
 - **THEN** exactly 5 cells hold balls, the score is 0, and no line of 5 or more same-colored balls exists
 
 ### Requirement: Next balls
-The game SHALL always know up to 3 next balls. Each has a random color and a random free cell: a cell that holds no ball and no other next ball. There SHALL be fewer than 3 only when fewer free cells remained when they were chosen.
+The game SHALL always know up to 3 next balls. Each is chosen with a random color on a random free cell: a cell that holds no ball and no other next ball. There SHALL be fewer than 3 only when fewer free cells remained when they were chosen.
 
 #### Scenario: Plenty of room
 - **WHEN** a new game starts
@@ -51,11 +51,11 @@ A ball SHALL move to an empty cell only along a path of orthogonally adjacent em
 - **THEN** the move is allowed
 
 ### Requirement: Landing on a next ball
-When a ball lands on a cell holding a next ball, that next ball SHALL move to a random free cell, keeping its color.
+When a ball lands on a cell holding a next ball, that next ball SHALL move to the cell the ball left, keeping its color.
 
 #### Scenario: Next ball displaced
 - **WHEN** a ball lands on the cell of a next ball
-- **THEN** that next ball keeps its color and moves to a free cell that holds no ball and no other next ball
+- **THEN** that next ball keeps its color and moves to the cell the ball left
 
 ### Requirement: Removing lines after a move
 After a move, every line of 5 or more same-colored balls that includes the moved ball, horizontally, vertically or diagonally, SHALL be removed. When a move removes balls, the next balls SHALL NOT appear that turn, so the player moves again.
