@@ -1,6 +1,6 @@
 // Shared fixtures for the rules tests.
 
-import { CELLS, EMPTY, cellAt } from '../../src/game/board.ts';
+import { CELLS, COLORS, EMPTY, cellAt } from '../../src/game/board.ts';
 import { move } from '../../src/game/game.ts';
 import type { Ball, Game, Random } from '../../src/game/game.ts';
 import { findLines } from '../../src/game/lines.ts';
@@ -23,7 +23,7 @@ export function sequence(values: number[], rest: Random): Random {
   return () => (i < values.length ? values[i++] : rest());
 }
 
-/** A board from up to 9 rows of up to 9 characters: '.' is empty, '1'–'7' are colors. */
+/** A board from up to 9 rows of up to 9 characters: '.' is empty, '1'–'6' are colors. */
 export function boardOf(rows: string[]): number[] {
   const board = new Array<number>(CELLS).fill(EMPTY);
   rows.forEach((line, r) => {
@@ -36,7 +36,7 @@ export function boardOf(rows: string[]): number[] {
 
 /** A full board on which no two neighbours, in any of the 4 directions, share a color. */
 export function patternBoard(): number[] {
-  return Array.from({ length: CELLS }, (_, cell) => ((Math.floor(cell / 9) * 3 + (cell % 9)) % 7) + 1);
+  return Array.from({ length: CELLS }, (_, cell) => ((Math.floor(cell / 9) * 3 + (cell % 9)) % COLORS) + 1);
 }
 
 export function gameOf(board: number[], next: Ball[] = [], score = 0): Game {

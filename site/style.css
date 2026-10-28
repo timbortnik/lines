@@ -162,7 +162,6 @@ button:disabled {
 .c4 { --color: #fdd835; }
 .c5 { --color: #9c27b0; }
 .c6 { --color: #00bcd4; }
-.c7 { --color: #8d5524; }
 
 /* The cells are positioned, so without a z-index they would be drawn, and tapped, above the message. */
 .over {

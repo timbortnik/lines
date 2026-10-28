@@ -20,7 +20,7 @@ function play(game: Game, from: number, to: number, random: Random = seeded(1)) 
 }
 
 test('rejected moves return null and leave the game unchanged', () => {
-  const board = boardOf(['', '', '', '....1', '...2.3', '....4', '', '', '7']);
+  const board = boardOf(['', '', '', '....1', '...2.3', '....4', '', '', '6']);
   const game = gameOf(board, NEXT);
   const before = structuredClone(game);
   assert.equal(move({ ...game, over: true }, cellAt(8, 0), cellAt(8, 8), seeded(1)), null, 'game over');
@@ -32,7 +32,7 @@ test('rejected moves return null and leave the game unchanged', () => {
 });
 
 test('a route may cross a cell holding a next ball', () => {
-  const board = boardOf(['2', '', '', '', '1234.5671']);
+  const board = boardOf(['2', '', '', '', '1234.5612']);
   const turn = play(gameOf(board, [{ cell: cellAt(4, 4), color: 3 }]), cellAt(0, 0), cellAt(8, 8));
   const moved = turn.events[0];
   assert.ok(moved.type === 'moved' && moved.path.includes(cellAt(4, 4)));

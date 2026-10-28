@@ -7,7 +7,7 @@ import { boardOf } from './helpers.ts';
 const emptyBoard = (): number[] => new Array<number>(CELLS).fill(EMPTY);
 
 // Column 4 is a wall of balls except at the bottom row.
-const WALL = ['....1', '....2', '....3', '....4', '....5', '....6', '....7', '....1'];
+const WALL = ['....1', '....2', '....3', '....4', '....5', '....6', '....1', '....2'];
 
 test('a shortest route across an empty board', () => {
   assert.deepEqual(findPath(emptyBoard(), cellAt(0, 0), cellAt(0, 3)), [0, 1, 2, 3]);

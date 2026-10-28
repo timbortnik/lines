@@ -4,7 +4,7 @@ import { CELLS, COLORS, EMPTY, cellAt } from '../../src/game/board.ts';
 import { NEXT_BALLS, START_BALLS, move, newGame, points } from '../../src/game/game.ts';
 import { balls, gameOf, hasLine, patternBoard, seeded, sequence } from './helpers.ts';
 
-test('a new game: 81 cells, 5 balls in the 7 colors, score 0, 3 next balls on distinct empty cells, no line', () => {
+test('a new game: 81 cells, 5 balls in the 6 colors, score 0, 3 next balls on distinct empty cells, no line', () => {
   for (let seed = 1; seed <= 50; seed++) {
     const game = newGame(seeded(seed));
     assert.equal(game.board.length, CELLS);
@@ -17,6 +17,12 @@ test('a new game: 81 cells, 5 balls in the 7 colors, score 0, 3 next balls on di
     for (const ball of game.next) assert.equal(game.board[ball.cell], EMPTY);
     assert.equal(hasLine(game.board), false);
   }
+});
+
+test('colors run from 1 to 6: a draw of 0 gives color 1, a draw just below 1 gives color 6', () => {
+  // Five draws of 0 put the starting balls on cells 0–4; the next five draws give their colors.
+  const game = newGame(sequence([0, 0, 0, 0, 0, 0, 0.999, 0, 0.999, 0], seeded(1)));
+  assert.deepEqual(game.board.slice(0, 5), [1, 6, 1, 6, 1]);
 });
 
 test('a starting draw that forms a line is drawn again', () => {

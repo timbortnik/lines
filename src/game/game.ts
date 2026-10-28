@@ -13,7 +13,7 @@ export interface Ball {
 }
 
 export interface Game {
-  /** 81 cells, row by row: EMPTY or a color 1–7. */
+  /** 81 cells, row by row: EMPTY or a color 1–6. */
   board: number[];
   /** The balls due to appear next, each on a cell that holds no ball. */
   next: Ball[];
