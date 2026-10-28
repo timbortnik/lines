@@ -18,4 +18,5 @@
 
 - [x] 2.1 Run the pre-review skill once on the whole branch, in a fresh read-only subagent, and apply the fixes the maintainer agrees to. Verify: findings and fixes are recorded for the pull request description.
   - Done 2026-10-28: no code defects; reverting `COLORS` and each color bound turns a test red; all 5 findings, all wording, applied with approval.
-- [ ] 2.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+- [x] 2.2 Archive the change, syncing its specs. Verify: `openspec validate --specs` passes and `openspec list` shows no active change.
+  - Done 2026-10-28: replaced game-rules' "Board and colors"; `openspec validate --specs` passes for all 7 specs, and no change is active.

@@ -7,11 +7,11 @@ Defines the rules of Color Lines as this game plays them: the board, the startin
 ## Requirements
 
 ### Requirement: Board and colors
-The board SHALL be a 9×9 grid of cells. Each cell SHALL be empty or hold one ball of one of 7 colors.
+The board SHALL be a 9×9 grid of cells. Each cell SHALL be empty or hold one ball of one of 6 colors.
 
 #### Scenario: New board
 - **WHEN** a new game starts
-- **THEN** the board has 81 cells, and every ball on it has one of the 7 colors
+- **THEN** the board has 81 cells, and every ball on it has one of the 6 colors
 
 ### Requirement: Starting position
 A new game SHALL start with a score of 0 and 5 balls of random colors on random cells, none of them part of a line of 5 or more.
