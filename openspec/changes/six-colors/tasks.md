@@ -2,7 +2,7 @@
 
 ## 1. Six colors
 
-- [ ] 1.1 In `src/game/board.ts`, set `COLORS` to 6, and say "1–6" in the board comment in `src/game/game.ts`. Move `test/game/` off color 7:
+- [x] 1.1 In `src/game/board.ts`, set `COLORS` to 6, and say "1–6" in the board comment in `src/game/game.ts`. Move `test/game/` off color 7:
   - `patternBoard` in `helpers.ts` cycles through `COLORS`, still with no two neighbours sharing a color;
   - the `boardOf` comment says '1'–'6';
   - the boards in `move.test.ts` and `path.test.ts` that hold a 7 use colors 1–6 and keep what they test;
@@ -10,6 +10,7 @@
   - the save test for an out-of-range color uses 7, the first color out of range.
 
   Add a game test that a random draw just below 1 gives color 6. Verify: `npm test` passes at 100% coverage, and setting `COLORS` back to 7 fails the new game test and the save test.
+  - Done 2026-10-28: 85 tests pass at 100% coverage; with `COLORS` at 7, exactly the new color test and both save color tests fail.
 - [ ] 1.2 Remove the brown ball style (`.c7`) from `site/style.css`. Verify: `npm test` passes; no `c7` is left in `site/` or `src/`; a new game in the browser shows only red, green, blue, yellow, purple and cyan balls.
 
 ## 2. Review and archive

@@ -2,7 +2,7 @@
 
 export const SIZE = 9;
 export const CELLS = SIZE * SIZE;
-export const COLORS = 7;
+export const COLORS = 6;
 export const EMPTY = 0;
 
 export const row = (cell: number): number => Math.floor(cell / SIZE);
