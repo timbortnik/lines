@@ -11,7 +11,8 @@
 
   Add a game test that a random draw just below 1 gives color 6. Verify: `npm test` passes at 100% coverage, and setting `COLORS` back to 7 fails the new game test and the save test.
   - Done 2026-10-28: 85 tests pass at 100% coverage; with `COLORS` at 7, exactly the new color test and both save color tests fail.
-- [ ] 1.2 Remove the brown ball style (`.c7`) from `site/style.css`. Verify: `npm test` passes; no `c7` is left in `site/` or `src/`; a new game in the browser shows only red, green, blue, yellow, purple and cyan balls.
+- [x] 1.2 Remove the brown ball style (`.c7`) from `site/style.css`. Verify: `npm test` passes; no `c7` is left in `site/` or `src/`; a new game in the browser shows only red, green, blue, yellow, purple and cyan balls.
+  - Done 2026-10-28: 85 tests pass; no `c7` left; headless Chrome drew 330 balls over 30 new games, all `c1`–`c6`, each styled.
 
 ## 2. Review and archive
 
