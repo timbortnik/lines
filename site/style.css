@@ -24,6 +24,14 @@ body {
   touch-action: manipulation;
 }
 
+/* No text selection on a long tap: nothing on the page is worth copying. Safari has only the prefixed form.
+   The dialog needs its own rule, because Chrome resets an open modal dialog to selectable text. */
+body,
+dialog {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 main {
   display: grid;
   justify-items: center;
