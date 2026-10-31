@@ -8,6 +8,8 @@
 }
 
 html {
+  /* The page is already dark. Saying so stops Chrome's forced dark mode from inverting the board and balls. */
+  color-scheme: dark;
   background: #2b2b2b;
   color: #eee;
   font: 18px/1.2 system-ui, sans-serif;
